@@ -1,142 +1,163 @@
-# Base Android Project - Kotlin & Jetpack Compose
+# Proyecto Base Android - Kotlin & Jetpack Compose
 
-A clean, modern Android project template built with Kotlin and Jetpack Compose. Perfect starting point for new Android applications.
+Plantilla moderna de proyecto Android construida con Kotlin y Jetpack Compose. Punto de partida perfecto para nuevas aplicaciones Android.
 
-## Features
+## Ramas
 
-- **Kotlin** - Modern, concise programming language
-- **Jetpack Compose** - Declarative UI framework
-- **Material 3** - Latest Material Design components
-- **Dark/Light Theme** - Automatic theme switching
-- **Dynamic Colors** - Android 12+ dynamic theming support
-- **Clean Architecture** - Ready for scalable app development
+### `main` - Plantilla Básica
+Plantilla inicial limpia con solo pantalla de bienvenida.
 
-## Project Structure
+### `native-features` - Demo Completa de Características Nativas
+**¡ESTÁS AQUÍ!** Ejemplos completos de todas las características nativas de Android incluyendo:
+- 📳 Patrones de vibración
+- 💾 Almacenamiento local (DataStore)
+- 🔐 Autenticación biométrica
+- 📷 Acceso a la cámara
+- 🔦 Control de linterna
+- 📱 Sensores de acelerómetro
+- 🔋 Monitoreo de batería
+- 📍 GPS/Ubicación
+- 🔔 Notificaciones push
+
+Ver [GUIA_CARACTERISTICAS_NATIVAS.md](GUIA_CARACTERISTICAS_NATIVAS.md) para documentación completa.
+
+## Características
+
+- **Kotlin** - Lenguaje de programación moderno y conciso
+- **Jetpack Compose** - Framework de UI declarativo
+- **Material 3** - Componentes de Material Design más recientes
+- **Navegación** - Navegación multi-pantalla con Jetpack Navigation
+- **Tema Claro/Oscuro** - Cambio automático de tema
+- **Colores Dinámicos** - Soporte de temas dinámicos de Android 12+
+- **Características Nativas** - Ejemplos funcionales de todas las APIs principales de Android
+- **Arquitectura Limpia** - Lista para desarrollo de apps escalables
+
+## Estructura del Proyecto
 
 ```
 app/
 ├── src/main/
 │   ├── java/com/example/baseproject/
-│   │   ├── MainActivity.kt              # Entry point
+│   │   ├── MainActivity.kt              # Punto de entrada
 │   │   └── ui/
 │   │       ├── screens/
-│   │       │   └── WelcomeScreen.kt     # Welcome screen composable
+│   │       │   └── WelcomeScreen.kt     # Pantalla de bienvenida composable
 │   │       └── theme/
-│   │           ├── Color.kt             # Color definitions
-│   │           ├── Theme.kt             # App theme
-│   │           └── Type.kt              # Typography
+│   │           ├── Color.kt             # Definiciones de colores
+│   │           ├── Theme.kt             # Tema de la app
+│   │           └── Type.kt              # Tipografía
 │   └── res/
 │       ├── values/
-│       │   ├── strings.xml              # String resources
-│       │   └── themes.xml               # App themes
-│       └── mipmap-*/                    # App icons
-└── build.gradle.kts                     # App dependencies
+│       │   ├── strings.xml              # Recursos de texto
+│       │   └── themes.xml               # Temas de la app
+│       └── mipmap-*/                    # Iconos de la app
+└── build.gradle.kts                     # Dependencias de la app
 ```
 
-## Requirements
+## Requisitos
 
-- **Android Studio** Hedgehog (2023.1.1) or later
-- **JDK** 8 or higher
-- **Minimum SDK** 24 (Android 7.0)
-- **Target SDK** 34 (Android 14)
+- **Android Studio** Hedgehog (2023.1.1) o superior
+- **JDK** 8 o superior
+- **SDK Mínimo** 24 (Android 7.0)
+- **SDK Objetivo** 34 (Android 14)
 
-## Getting Started
+## Primeros Pasos
 
-### 1. Clone the Repository
+### 1. Clonar el Repositorio
 
 ```bash
-git clone <your-repo-url>
+git clone <url-de-tu-repo>
 cd duoc-clase-movil-repo
 ```
 
-### 2. Open in Android Studio
+### 2. Abrir en Android Studio
 
-1. Open Android Studio
-2. Select "Open an Existing Project"
-3. Navigate to the cloned repository
-4. Wait for Gradle sync to complete
+1. Abrir Android Studio
+2. Seleccionar "Open an Existing Project"
+3. Navegar al repositorio clonado
+4. Esperar a que complete la sincronización de Gradle
 
-### 3. Run the App
+### 3. Ejecutar la App
 
-1. Connect an Android device or start an emulator
-2. Click the "Run" button (green play icon)
-3. Select your device/emulator
-4. The app will build and launch
+1. Conectar un dispositivo Android o iniciar un emulador
+2. Hacer clic en el botón "Run" (ícono de play verde)
+3. Seleccionar tu dispositivo/emulador
+4. La app se compilará y ejecutará
 
-## Customization
+## Personalización
 
-### Change Package Name
+### Cambiar Nombre del Paquete
 
-1. In Android Studio, right-click on the package `com.example.baseproject`
-2. Select "Refactor" → "Rename"
-3. Update the package name
-4. Update `namespace` in [app/build.gradle.kts](app/build.gradle.kts)
-5. Update `package` in [AndroidManifest.xml](app/src/main/AndroidManifest.xml)
+1. En Android Studio, hacer clic derecho en el paquete `com.example.baseproject`
+2. Seleccionar "Refactor" → "Rename"
+3. Actualizar el nombre del paquete
+4. Actualizar `namespace` en [app/build.gradle.kts](app/build.gradle.kts)
+5. Actualizar `package` en [AndroidManifest.xml](app/src/main/AndroidManifest.xml)
 
-### Change App Name
+### Cambiar Nombre de la App
 
-Edit the `app_name` in [strings.xml](app/src/main/res/values/strings.xml):
+Editar `app_name` en [strings.xml](app/src/main/res/values/strings.xml):
 
 ```xml
-<string name="app_name">Your App Name</string>
+<string name="app_name">Nombre de Tu App</string>
 ```
 
-### Customize Theme Colors
+### Personalizar Colores del Tema
 
-Edit colors in [Color.kt](app/src/main/java/com/example/baseproject/ui/theme/Color.kt):
+Editar colores en [Color.kt](app/src/main/java/com/example/baseproject/ui/theme/Color.kt):
 
 ```kotlin
-val Purple40 = Color(0xFF6650a4)  // Primary color
-val PurpleGrey40 = Color(0xFF625b71)  // Secondary color
-val Pink40 = Color(0xFF7D5260)  // Tertiary color
+val Purple40 = Color(0xFF6650a4)  // Color primario
+val PurpleGrey40 = Color(0xFF625b71)  // Color secundario
+val Pink40 = Color(0xFF7D5260)  // Color terciario
 ```
 
-### Add Launcher Icons
+### Agregar Iconos de Lanzador
 
-1. Right-click on `res` folder in Android Studio
-2. Select "New" → "Image Asset"
-3. Follow the wizard to generate icons
-4. Or use the online tool: https://romannurik.github.io/AndroidAssetStudio/
+1. Hacer clic derecho en la carpeta `res` en Android Studio
+2. Seleccionar "New" → "Image Asset"
+3. Seguir el asistente para generar iconos
+4. O usar la herramienta online: https://romannurik.github.io/AndroidAssetStudio/
 
-## Dependencies
+## Dependencias
 
 - **Compose BOM**: 2023.10.01
-- **Material 3**: Latest
+- **Material 3**: Última versión
 - **Kotlin**: 1.9.20
 - **Android Gradle Plugin**: 8.2.0
 
-## Building for Production
+## Compilación para Producción
 
-### Debug Build
+### Compilación Debug
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-### Release Build
+### Compilación Release
 
 ```bash
 ./gradlew assembleRelease
 ```
 
-The APK will be in `app/build/outputs/apk/`
+El APK estará en `app/build/outputs/apk/`
 
-## Next Steps
+## Próximos Pasos
 
-- Add navigation (Jetpack Navigation Compose)
-- Implement ViewModel and state management
-- Add dependency injection (Hilt/Koin)
-- Set up networking (Retrofit/Ktor)
-- Add local database (Room)
-- Configure CI/CD
+- Agregar navegación (Jetpack Navigation Compose)
+- Implementar ViewModel y gestión de estado
+- Agregar inyección de dependencias (Hilt/Koin)
+- Configurar networking (Retrofit/Ktor)
+- Agregar base de datos local (Room)
+- Configurar CI/CD
 
-## License
+## Licencia
 
-This is a base template project. Use it freely for your own projects.
+Este es un proyecto plantilla base. Úsalo libremente para tus propios proyectos.
 
-## Support
+## Soporte
 
-For issues or questions about Android development:
+Para problemas o preguntas sobre desarrollo Android:
 - [Android Developers](https://developer.android.com/)
-- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Documentación de Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Documentación de Kotlin](https://kotlinlang.org/docs/home.html)
