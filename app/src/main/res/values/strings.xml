@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Base Android Project</string>
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_subtitle">This is your base Android project</string>
+    <string name="welcome_description">Built with Kotlin and Jetpack Compose. Start building your amazing app from here.</string>
+    <string name="get_started">Get Started</string>
+</resources>
