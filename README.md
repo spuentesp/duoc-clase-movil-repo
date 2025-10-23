@@ -1,142 +1,142 @@
-# Base Android Project - Kotlin & Jetpack Compose
+# Proyecto Base Android - Kotlin & Jetpack Compose
 
-A clean, modern Android project template built with Kotlin and Jetpack Compose. Perfect starting point for new Android applications.
+Una plantilla de proyecto Android limpia y moderna construida con Kotlin y Jetpack Compose.
 
-## Features
+## Características
 
-- **Kotlin** - Modern, concise programming language
-- **Jetpack Compose** - Declarative UI framework
-- **Material 3** - Latest Material Design components
-- **Dark/Light Theme** - Automatic theme switching
-- **Dynamic Colors** - Android 12+ dynamic theming support
-- **Clean Architecture** - Ready for scalable app development
+- **Kotlin** - Lenguaje de programación moderno y conciso
+- **Jetpack Compose** - Framework de UI declarativa
+- **Material 3** -  componentes de Material Design
+- **Tema Oscuro/Claro** - Cambio automático de tema
+- **Colores Dinámicos** - Soporte para temas dinámicos de Android 12+
+- **Arquitectura Limpia** - Lista para desarrollo escalable de aplicaciones
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 app/
 ├── src/main/
 │   ├── java/com/example/baseproject/
-│   │   ├── MainActivity.kt              # Entry point
+│   │   ├── MainActivity.kt              # Punto de entrada
 │   │   └── ui/
 │   │       ├── screens/
-│   │       │   └── WelcomeScreen.kt     # Welcome screen composable
+│   │       │   └── WelcomeScreen.kt     # Composable de pantalla de bienvenida
 │   │       └── theme/
-│   │           ├── Color.kt             # Color definitions
-│   │           ├── Theme.kt             # App theme
-│   │           └── Type.kt              # Typography
+│   │           ├── Color.kt             # Definiciones de colores
+│   │           ├── Theme.kt             # Tema de la aplicación
+│   │           └── Type.kt              # Tipografía
 │   └── res/
 │       ├── values/
-│       │   ├── strings.xml              # String resources
-│       │   └── themes.xml               # App themes
-│       └── mipmap-*/                    # App icons
-└── build.gradle.kts                     # App dependencies
+│       │   ├── strings.xml              # Recursos de texto
+│       │   └── themes.xml               # Temas de la aplicación
+│       └── mipmap-*/                    # Íconos de la aplicación
+└── build.gradle.kts                     # Dependencias de la aplicación
 ```
 
-## Requirements
+## Requisitos
 
-- **Android Studio** Hedgehog (2023.1.1) or later
-- **JDK** 8 or higher
-- **Minimum SDK** 24 (Android 7.0)
-- **Target SDK** 34 (Android 14)
+- **Android Studio** Hedgehog (2023.1.1) o posterior
+- **JDK** 8 o superior
+- **SDK Mínimo** 24 (Android 7.0)
+- **SDK Objetivo** 34 (Android 14)
 
-## Getting Started
+## Comenzando
 
-### 1. Clone the Repository
+### 1. Clonar el Repositorio
 
 ```bash
-git clone <your-repo-url>
+git clone <url-de-tu-repositorio>
 cd duoc-clase-movil-repo
 ```
 
-### 2. Open in Android Studio
+### 2. Abrir en Android Studio
 
-1. Open Android Studio
-2. Select "Open an Existing Project"
-3. Navigate to the cloned repository
-4. Wait for Gradle sync to complete
+1. Abre Android Studio
+2. Selecciona "Abrir un Proyecto Existente"
+3. Navega al repositorio clonado
+4. Espera a que se complete la sincronización de Gradle
 
-### 3. Run the App
+### 3. Ejecutar la Aplicación
 
-1. Connect an Android device or start an emulator
-2. Click the "Run" button (green play icon)
-3. Select your device/emulator
-4. The app will build and launch
+1. Conecta un dispositivo Android o inicia un emulador
+2. Haz clic en el botón "Run" (ícono de play verde)
+3. Selecciona tu dispositivo/emulador
+4. La aplicación se compilará e iniciará
 
-## Customization
+## Personalización
 
-### Change Package Name
+### Cambiar el Nombre del Paquete
 
-1. In Android Studio, right-click on the package `com.example.baseproject`
-2. Select "Refactor" → "Rename"
-3. Update the package name
-4. Update `namespace` in [app/build.gradle.kts](app/build.gradle.kts)
-5. Update `package` in [AndroidManifest.xml](app/src/main/AndroidManifest.xml)
+1. En Android Studio, haz clic derecho en el paquete `com.example.baseproject`
+2. Selecciona "Refactor" → "Rename"
+3. Actualiza el nombre del paquete
+4. Actualiza `namespace` en [app/build.gradle.kts](app/build.gradle.kts)
+5. Actualiza `package` en [AndroidManifest.xml](app/src/main/AndroidManifest.xml)
 
-### Change App Name
+### Cambiar el Nombre de la Aplicación
 
-Edit the `app_name` in [strings.xml](app/src/main/res/values/strings.xml):
+Edita `app_name` en [strings.xml](app/src/main/res/values/strings.xml):
 
 ```xml
-<string name="app_name">Your App Name</string>
+<string name="app_name">Nombre de Tu Aplicación</string>
 ```
 
-### Customize Theme Colors
+### Personalizar los Colores del Tema
 
-Edit colors in [Color.kt](app/src/main/java/com/example/baseproject/ui/theme/Color.kt):
+Edita los colores en [Color.kt](app/src/main/java/com/example/baseproject/ui/theme/Color.kt):
 
 ```kotlin
-val Purple40 = Color(0xFF6650a4)  // Primary color
-val PurpleGrey40 = Color(0xFF625b71)  // Secondary color
-val Pink40 = Color(0xFF7D5260)  // Tertiary color
+val Purple40 = Color(0xFF6650a4)  // Color primario
+val PurpleGrey40 = Color(0xFF625b71)  // Color secundario
+val Pink40 = Color(0xFF7D5260)  // Color terciario
 ```
 
-### Add Launcher Icons
+### Agregar Íconos de Lanzamiento
 
-1. Right-click on `res` folder in Android Studio
-2. Select "New" → "Image Asset"
-3. Follow the wizard to generate icons
-4. Or use the online tool: https://romannurik.github.io/AndroidAssetStudio/
+1. Haz clic derecho en la carpeta `res` en Android Studio
+2. Selecciona "New" → "Image Asset"
+3. Sigue el asistente para generar íconos
+4. O usa la herramienta en línea: https://romannurik.github.io/AndroidAssetStudio/
 
-## Dependencies
+## Dependencias
 
 - **Compose BOM**: 2023.10.01
-- **Material 3**: Latest
+- **Material 3**: Última versión
 - **Kotlin**: 1.9.20
 - **Android Gradle Plugin**: 8.2.0
 
-## Building for Production
+## Compilación para Producción
 
-### Debug Build
+### Compilación de Depuración
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-### Release Build
+### Compilación de Lanzamiento
 
 ```bash
 ./gradlew assembleRelease
 ```
 
-The APK will be in `app/build/outputs/apk/`
+El APK estará en `app/build/outputs/apk/`
 
-## Next Steps
+## Próximos Pasos
 
-- Add navigation (Jetpack Navigation Compose)
-- Implement ViewModel and state management
-- Add dependency injection (Hilt/Koin)
-- Set up networking (Retrofit/Ktor)
-- Add local database (Room)
-- Configure CI/CD
+- Agregar navegación (Jetpack Navigation Compose)
+- Implementar ViewModel y gestión de estado
+- Agregar inyección de dependencias (Hilt/Koin)
+- Configurar networking (Retrofit/Ktor)
+- Agregar base de datos local (Room)
+- Configurar CI/CD
 
-## License
+## Licencia
 
-This is a base template project. Use it freely for your own projects.
+Este es un proyecto de plantilla base. Úsalo libremente para tus propios proyectos.
 
-## Support
+## Soporte
 
-For issues or questions about Android development:
+Para problemas o preguntas sobre desarrollo Android:
 - [Android Developers](https://developer.android.com/)
-- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Documentación de Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Documentación de Kotlin](https://kotlinlang.org/docs/home.html)
