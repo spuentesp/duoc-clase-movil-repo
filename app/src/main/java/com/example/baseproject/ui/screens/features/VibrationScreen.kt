@@ -25,10 +25,10 @@ fun VibrationScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Vibration") },
+                title = { Text("Vibración") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -43,54 +43,54 @@ fun VibrationScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Vibration API",
+                text = "API de Vibración",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Test different vibration patterns on your device.",
+                text = "Prueba diferentes patrones de vibración en tu dispositivo.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Divider()
 
-            // Simple vibration
+            // Vibración simple
             Button(
                 onClick = { vibrateSimple(context) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Simple Vibration (500ms)")
+                Text("Vibración Simple (500ms)")
             }
 
-            // Pattern vibration
+            // Vibración con patrón
             Button(
                 onClick = { vibratePattern(context) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Pattern Vibration (SOS)")
+                Text("Vibración con Patrón (SOS)")
             }
 
-            // Click effect
+            // Efecto de clic
             Button(
                 onClick = { vibrateClick(context) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Click Effect")
+                Text("Efecto de Clic")
             }
 
-            // Heavy click effect
+            // Efecto de clic fuerte
             Button(
                 onClick = { vibrateHeavyClick(context) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Heavy Click Effect")
+                Text("Efecto de Clic Fuerte")
             }
 
             Divider()
 
-            // Code example
+            // Ejemplo de código
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -102,7 +102,7 @@ fun VibrationScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// Get vibrator service
+// Obtener el servicio de vibrador
 val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     val vibratorManager = context.getSystemService(
         Context.VIBRATOR_MANAGER_SERVICE
@@ -113,7 +113,7 @@ val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 }
 
-// Simple vibration (500ms)
+// Vibración simple (500ms)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     vibrator.vibrate(
         VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
@@ -123,7 +123,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     vibrator.vibrate(500)
 }
 
-// Pattern vibration (delay, vibrate, delay, vibrate...)
+// Vibración con patrón (retraso, vibrar, retraso, vibrar...)
 val pattern = longArrayOf(0, 200, 100, 300, 100, 200)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     vibrator.vibrate(
@@ -134,7 +134,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     vibrator.vibrate(pattern, -1)
 }
 
-// Click effect (API 29+)
+// Efecto de clic (API 29+)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
     vibrator.vibrate(
         VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
@@ -147,7 +147,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 )
             }
 
-            // Permissions note
+            // Nota de permisos
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -156,7 +156,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Required Permission:",
+                        text = "Permiso Requerido:",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onTertiaryContainer
                     )
@@ -198,7 +198,7 @@ private fun vibratePattern(context: Context) {
         context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    // SOS pattern: ... --- ...
+    // Patrón SOS: ... --- ...
     val pattern = longArrayOf(0, 200, 100, 200, 100, 200, 100, 500, 100, 500, 100, 500, 100, 200, 100, 200, 100, 200)
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-// Extension property for DataStore
+// Propiedad de extensión para DataStore
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +33,7 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
     var inputText by remember { mutableStateOf("") }
     var storedValue by remember { mutableStateOf("") }
 
-    // Load stored value on composition
+    // Cargar valor almacenado al componer
     LaunchedEffect(Unit) {
         storedValue = readFromDataStore(context)
     }
@@ -41,10 +41,10 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Local Storage") },
+                title = { Text("Almacenamiento Local") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -59,26 +59,26 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Local Storage (DataStore)",
+                text = "Almacenamiento Local (DataStore)",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Save and retrieve data locally using DataStore Preferences.",
+                text = "Guarda y recupera datos localmente usando DataStore Preferences.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Divider()
 
-            // Input field
+            // Campo de entrada
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { inputText = it },
-                label = { Text("Enter text to save") },
+                label = { Text("Ingresa texto para guardar") },
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Save button
+            // Botón guardar
             Button(
                 onClick = {
                     scope.launch {
@@ -89,10 +89,10 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Save to DataStore")
+                Text("Guardar en DataStore")
             }
 
-            // Display stored value
+            // Mostrar valor almacenado
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -101,7 +101,7 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Stored Value:",
+                        text = "Valor Almacenado:",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
@@ -114,7 +114,7 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
                 }
             }
 
-            // Read button
+            // Botón leer
             Button(
                 onClick = {
                     scope.launch {
@@ -123,10 +123,10 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Reload from DataStore")
+                Text("Recargar desde DataStore")
             }
 
-            // Clear button
+            // Botón limpiar
             OutlinedButton(
                 onClick = {
                     scope.launch {
@@ -136,14 +136,14 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Clear DataStore")
+                Text("Limpiar DataStore")
             }
 
             Divider()
 
-            // Code example
+            // Ejemplo de código
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -155,33 +155,33 @@ fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// 1. Create DataStore extension
+// 1. Crear extensión DataStore
 val Context.dataStore: DataStore<Preferences> by
     preferencesDataStore(name = "settings")
 
-// 2. Define preference key
+// 2. Definir clave de preferencia
 val USER_NAME_KEY = stringPreferencesKey("user_name")
 
-// 3. Write data
+// 3. Escribir datos
 suspend fun saveData(context: Context, value: String) {
     context.dataStore.edit { preferences ->
         preferences[USER_NAME_KEY] = value
     }
 }
 
-// 4. Read data
+// 4. Leer datos
 suspend fun readData(context: Context): String {
     val preferences = context.dataStore.data.first()
     return preferences[USER_NAME_KEY] ?: "default"
 }
 
-// 5. Or use Flow for reactive updates
+// 5. O usar Flow para actualizaciones reactivas
 val userNameFlow: Flow<String> = context.dataStore.data
     .map { preferences ->
         preferences[USER_NAME_KEY] ?: "default"
     }
 
-// 6. Clear data
+// 6. Limpiar datos
 suspend fun clearData(context: Context) {
     context.dataStore.edit { preferences ->
         preferences.clear()
@@ -194,7 +194,7 @@ suspend fun clearData(context: Context) {
                 )
             }
 
-            // Dependency note
+            // Nota de dependencia
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -203,7 +203,7 @@ suspend fun clearData(context: Context) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Required Dependency:",
+                        text = "Dependencia Requerida:",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onTertiaryContainer
                     )

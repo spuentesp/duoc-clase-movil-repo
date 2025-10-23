@@ -25,10 +25,10 @@ fun FlashlightScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Flashlight") },
+                title = { Text("Linterna") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -43,12 +43,12 @@ fun FlashlightScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Flashlight Control",
+                text = "Control de Linterna",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Control the device's flashlight/torch.",
+                text = "Controla la linterna del dispositivo.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -72,7 +72,7 @@ fun FlashlightScreen(onBackClick: () -> Unit = {}) {
             Divider()
 
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -84,21 +84,21 @@ fun FlashlightScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// Get camera manager
+// Obtener el gestor de cámara
 val cameraManager = context.getSystemService(
     Context.CAMERA_SERVICE
 ) as CameraManager
 
-// Get camera ID (usually "0" is back camera)
+// Obtener ID de cámara (usually "0" is back camera)
 val cameraId = cameraManager.cameraIdList[0]
 
-// Turn ON flashlight
+// Encender linterna
 cameraManager.setTorchMode(cameraId, true)
 
-// Turn OFF flashlight
+// Apagar linterna
 cameraManager.setTorchMode(cameraId, false)
 
-// Check if flashlight is available
+// Verificar si la linterna está disponible
 val hasFlash = context.packageManager
     .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
                     """.trimIndent(),
@@ -116,11 +116,11 @@ val hasFlash = context.packageManager
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Note:",
+                        text = "Nota:",
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
-                        text = "No special permissions required for flashlight control!",
+                        text = "¡No se requieren permisos especiales para controlar la linterna!",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

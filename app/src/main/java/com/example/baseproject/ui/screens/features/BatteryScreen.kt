@@ -25,10 +25,10 @@ fun BatteryScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Battery Status") },
+                title = { Text("Estado de Batería") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -43,12 +43,12 @@ fun BatteryScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Battery Information",
+                text = "Información de Batería",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Monitor battery level and charging status.",
+                text = "Monitorea el nivel de batería y estado de carga.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -58,7 +58,7 @@ fun BatteryScreen(onBackClick: () -> Unit = {}) {
                 onClick = { batteryInfo = getBatteryInfo(context) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Refresh Battery Info")
+                Text("Actualizar Info de Batería")
             }
 
             Card(
@@ -69,22 +69,22 @@ fun BatteryScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "Battery Status",
+                        text = "Estado de Batería",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Text("Level: ${batteryInfo.level}%")
-                    Text("Status: ${batteryInfo.status}")
-                    Text("Charging: ${if (batteryInfo.isCharging) "Yes" else "No"}")
-                    Text("Health: ${batteryInfo.health}")
-                    Text("Temperature: ${batteryInfo.temperature}°C")
-                    Text("Voltage: ${batteryInfo.voltage}mV")
+                    Text("Nivel: ${batteryInfo.level}%")
+                    Text("Estado: ${batteryInfo.status}")
+                    Text("Cargando: ${if (batteryInfo.isCharging) "Sí" else "No"}")
+                    Text("Salud: ${batteryInfo.health}")
+                    Text("Temperatura: ${batteryInfo.temperature}°C")
+                    Text("Voltaje: ${batteryInfo.voltage}mV")
                 }
             }
 
             Divider()
 
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -96,17 +96,17 @@ fun BatteryScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// Get battery manager
+// Obtener el gestor de batería
 val batteryManager = context.getSystemService(
     Context.BATTERY_SERVICE
 ) as BatteryManager
 
-// Get battery level
+// Obtener nivel de batería
 val level = batteryManager.getIntProperty(
     BatteryManager.BATTERY_PROPERTY_CAPACITY
 )
 
-// Alternative: Using BroadcastReceiver
+// Alternativa: Usar BroadcastReceiver
 val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
 val batteryStatus = context.registerReceiver(null, filter)
 
@@ -141,11 +141,11 @@ batteryStatus?.let { intent ->
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Note:",
+                        text = "Nota:",
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
-                        text = "No special permissions required for battery info!",
+                        text = "¡No se requieren permisos especiales para info de batería!",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -171,11 +171,11 @@ private fun getBatteryInfo(context: Context): BatteryInfo {
 
     val status = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
     val statusText = when (status) {
-        BatteryManager.BATTERY_STATUS_CHARGING -> "Charging"
-        BatteryManager.BATTERY_STATUS_DISCHARGING -> "Discharging"
-        BatteryManager.BATTERY_STATUS_FULL -> "Full"
-        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "Not Charging"
-        else -> "Unknown"
+        BatteryManager.BATTERY_STATUS_CHARGING -> "Cargando"
+        BatteryManager.BATTERY_STATUS_DISCHARGING -> "Descargando"
+        BatteryManager.BATTERY_STATUS_FULL -> "Completa"
+        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "No Cargando"
+        else -> "Desconocido"
     }
 
     val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
@@ -183,12 +183,12 @@ private fun getBatteryInfo(context: Context): BatteryInfo {
 
     val health = batteryStatus?.getIntExtra(BatteryManager.EXTRA_HEALTH, -1) ?: -1
     val healthText = when (health) {
-        BatteryManager.BATTERY_HEALTH_GOOD -> "Good"
-        BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Overheating"
-        BatteryManager.BATTERY_HEALTH_DEAD -> "Dead"
-        BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "Over Voltage"
-        BatteryManager.BATTERY_HEALTH_COLD -> "Cold"
-        else -> "Unknown"
+        BatteryManager.BATTERY_HEALTH_GOOD -> "Buena"
+        BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Sobrecalentando"
+        BatteryManager.BATTERY_HEALTH_DEAD -> "Muerta"
+        BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "Sobrevoltaje"
+        BatteryManager.BATTERY_HEALTH_COLD -> "Fría"
+        else -> "Desconocido"
     }
 
     val temperature = (batteryStatus?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) ?: 0) / 10f

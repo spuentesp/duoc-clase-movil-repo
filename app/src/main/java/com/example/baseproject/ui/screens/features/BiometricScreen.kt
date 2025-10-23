@@ -29,21 +29,21 @@ fun BiometricScreen(onBackClick: () -> Unit = {}) {
             BiometricManager.Authenticators.BIOMETRIC_STRONG or
             BiometricManager.Authenticators.DEVICE_CREDENTIAL
         )) {
-            BiometricManager.BIOMETRIC_SUCCESS -> "Biometric authentication available"
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> "No biometric hardware"
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> "Biometric hardware unavailable"
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> "No biometric enrolled"
-            else -> "Unknown status"
+            BiometricManager.BIOMETRIC_SUCCESS -> "Autenticación biométrica disponible"
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> "Sin hardware biométrico"
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> "Hardware biométrico no disponible"
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> "Sin datos biométricos registrados"
+            else -> "Estado desconocido"
         }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Biometric Authentication") },
+                title = { Text("Autenticación Biométrica") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -58,18 +58,18 @@ fun BiometricScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Biometric Authentication",
+                text = "Autenticación Biométrica",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Use fingerprint or face recognition for authentication.",
+                text = "Usa huella digital o reconocimiento facial para autenticación.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Divider()
 
-            // Status card
+            // Tarjeta de estado
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -78,7 +78,7 @@ fun BiometricScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Device Status:",
+                        text = "Estado del Dispositivo:",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
@@ -91,22 +91,22 @@ fun BiometricScreen(onBackClick: () -> Unit = {}) {
                 }
             }
 
-            // Authenticate button
+            // Botón autenticar
             Button(
                 onClick = {
                     authenticateWithBiometric(
                         context as FragmentActivity,
-                        onSuccess = { authResult = "✓ Authentication successful!" },
+                        onSuccess = { authResult = "✓ ¡Autenticación exitosa!" },
                         onError = { error -> authResult = "✗ Error: $error" },
-                        onFailed = { authResult = "✗ Authentication failed" }
+                        onFailed = { authResult = "✗ Autenticación falló" }
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Authenticate with Biometric")
+                Text("Autenticar con Biométrica")
             }
 
-            // Result display
+            // Mostrar resultado
             if (authResult.isNotEmpty()) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -127,9 +127,9 @@ fun BiometricScreen(onBackClick: () -> Unit = {}) {
 
             Divider()
 
-            // Code example
+            // Ejemplo de código
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -141,40 +141,40 @@ fun BiometricScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// 1. Check biometric availability
+// 1. Verificar disponibilidad biométrica
 val biometricManager = BiometricManager.from(context)
 val canAuthenticate = biometricManager.canAuthenticate(
     BiometricManager.Authenticators.BIOMETRIC_STRONG
 )
 
-// 2. Create prompt info
+// 2. Crear información del prompt
 val promptInfo = BiometricPrompt.PromptInfo.Builder()
     .setTitle("Biometric Authentication")
     .setSubtitle("Confirm your identity")
     .setNegativeButtonText("Cancel")
     .build()
 
-// 3. Create callback
+// 3. Crear callback
 val callback = object : BiometricPrompt.AuthenticationCallback() {
     override fun onAuthenticationSucceeded(
         result: BiometricPrompt.AuthenticationResult
     ) {
-        // Authentication successful
+        // Autenticación exitosa
     }
 
     override fun onAuthenticationFailed() {
-        // Authentication failed
+        // Autenticación falló
     }
 
     override fun onAuthenticationError(
         errorCode: Int,
         errString: CharSequence
     ) {
-        // Authentication error
+        // Error de autenticación
     }
 }
 
-// 4. Show biometric prompt
+// 4. Mostrar prompt biométrico
 val biometricPrompt = BiometricPrompt(
     activity,
     executor,
@@ -188,7 +188,7 @@ biometricPrompt.authenticate(promptInfo)
                 )
             }
 
-            // Dependency note
+            // Nota de dependencia
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -197,7 +197,7 @@ biometricPrompt.authenticate(promptInfo)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Required Dependency:",
+                        text = "Dependencia Requerida:",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onTertiaryContainer
                     )

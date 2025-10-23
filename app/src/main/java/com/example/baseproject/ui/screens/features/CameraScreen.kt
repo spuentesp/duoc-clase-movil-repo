@@ -46,10 +46,10 @@ fun CameraScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Camera") },
+                title = { Text("Cámara") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -64,7 +64,7 @@ fun CameraScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Camera Access",
+                text = "Acceso a Cámara",
                 style = MaterialTheme.typography.headlineSmall
             )
 
@@ -79,12 +79,12 @@ fun CameraScreen(onBackClick: () -> Unit = {}) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Camera permission is required")
+                        Text("Se requiere permiso de cámara")
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = {
                             launcher.launch(Manifest.permission.CAMERA)
                         }) {
-                            Text("Grant Permission")
+                            Text("Otorgar Permiso")
                         }
                     }
                 }
@@ -110,7 +110,7 @@ fun CameraScreen(onBackClick: () -> Unit = {}) {
             Divider()
 
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -122,7 +122,7 @@ fun CameraScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// 1. Request camera permission
+// 1. Solicitar permiso de cámara
 val launcher = rememberLauncherForActivityResult(
     ActivityResultContracts.RequestPermission()
 ) { isGranted ->
@@ -130,7 +130,7 @@ val launcher = rememberLauncherForActivityResult(
 }
 launcher.launch(Manifest.permission.CAMERA)
 
-// 2. Setup camera preview
+// 2. Configurar vista previa de cámara
 val cameraProviderFuture =
     ProcessCameraProvider.getInstance(context)
 
@@ -165,7 +165,7 @@ cameraProviderFuture.addListener({
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Required Permission:",
+                        text = "Permiso Requerido:",
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
@@ -175,7 +175,7 @@ cameraProviderFuture.addListener({
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Dependencies:",
+                        text = "Dependencias:",
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
@@ -221,7 +221,7 @@ fun CameraPreview(modifier: Modifier = Modifier) {
                         preview
                     )
                 } catch (exc: Exception) {
-                    // Handle exception
+                    // Manejar excepción
                 }
             }, ContextCompat.getMainExecutor(ctx))
 

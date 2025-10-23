@@ -59,10 +59,10 @@ fun AccelerometerScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Accelerometer") },
+                title = { Text("Acelerómetro") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -77,12 +77,12 @@ fun AccelerometerScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Accelerometer Sensor",
+                text = "Sensor de Acelerómetro",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Read motion and orientation sensor data.",
+                text = "Lee datos del sensor de movimiento y orientación.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -104,7 +104,7 @@ fun AccelerometerScreen(onBackClick: () -> Unit = {}) {
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = "Accelerometer Values:",
+                            text = "Valores del Acelerómetro:",
                             style = MaterialTheme.typography.titleMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -118,7 +118,7 @@ fun AccelerometerScreen(onBackClick: () -> Unit = {}) {
             Divider()
 
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -130,23 +130,23 @@ fun AccelerometerScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// 1. Get sensor manager
+// 1. Obtener gestor de sensores
 val sensorManager = context.getSystemService(
     Context.SENSOR_SERVICE
 ) as SensorManager
 
-// 2. Get accelerometer sensor
+// 2. Obtener sensor del acelerómetro
 val accelerometer = sensorManager.getDefaultSensor(
     Sensor.TYPE_ACCELEROMETER
 )
 
-// 3. Create sensor listener
+// 3. Crear listener del sensor
 val listener = object : SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let {
-            val x = it.values[0]  // X axis
-            val y = it.values[1]  // Y axis
-            val z = it.values[2]  // Z axis
+            val x = it.values[0]  // Eje X
+            val y = it.values[1]  // Eje Y
+            val z = it.values[2]  // Eje Z
         }
     }
 
@@ -156,14 +156,14 @@ val listener = object : SensorEventListener {
     ) {}
 }
 
-// 4. Register listener
+// 4. Registrar listener
 sensorManager.registerListener(
     listener,
     accelerometer,
     SensorManager.SENSOR_DELAY_NORMAL
 )
 
-// 5. Unregister when done
+// 5. Desregistrar cuando termine
 sensorManager.unregisterListener(listener)
                     """.trimIndent(),
                     modifier = Modifier.padding(16.dp),

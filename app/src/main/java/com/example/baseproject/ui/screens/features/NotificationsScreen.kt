@@ -54,10 +54,10 @@ fun NotificationsScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Notifications") },
+                title = { Text("Notificaciones") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -72,12 +72,12 @@ fun NotificationsScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Local Notifications",
+                text = "Notificaciones Locales",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Send local push notifications to the user.",
+                text = "Envía notificaciones push locales al usuario.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -94,12 +94,12 @@ fun NotificationsScreen(onBackClick: () -> Unit = {}) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Notification permission is required (Android 13+)")
+                        Text("Se requiere permiso de notificación (Android 13+)")
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = {
                             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                         }) {
-                            Text("Grant Permission")
+                            Text("Otorgar Permiso")
                         }
                     }
                 }
@@ -110,7 +110,7 @@ fun NotificationsScreen(onBackClick: () -> Unit = {}) {
                 modifier = Modifier.fillMaxWidth(),
                 enabled = hasNotificationPermission
             ) {
-                Text("Send Simple Notification")
+                Text("Enviar Notificación Simple")
             }
 
             Button(
@@ -118,13 +118,13 @@ fun NotificationsScreen(onBackClick: () -> Unit = {}) {
                 modifier = Modifier.fillMaxWidth(),
                 enabled = hasNotificationPermission
             ) {
-                Text("Send Notification with Action")
+                Text("Enviar Notificación con Acción")
             }
 
             Divider()
 
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -136,7 +136,7 @@ fun NotificationsScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// 1. Create notification channel (Android 8.0+)
+// 1. Crear canal de notificación (Android 8.0+)
 val channelId = "my_channel"
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     val channel = NotificationChannel(
@@ -150,7 +150,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
     notificationManager.createNotificationChannel(channel)
 }
 
-// 2. Build notification
+// 2. Construir notificación
 val notification = NotificationCompat.Builder(context, channelId)
     .setSmallIcon(R.drawable.ic_launcher_foreground)
     .setContentTitle("Notification Title")
@@ -158,7 +158,7 @@ val notification = NotificationCompat.Builder(context, channelId)
     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     .build()
 
-// 3. Show notification
+// 3. Mostrar notificación
 NotificationManagerCompat.from(context)
     .notify(notificationId, notification)
                     """.trimIndent(),

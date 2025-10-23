@@ -44,10 +44,10 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Location / GPS") },
+                title = { Text("Ubicación / GPS") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
                     }
                 }
             )
@@ -62,12 +62,12 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Location Services",
+                text = "Servicios de Ubicación",
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = "Get device GPS coordinates.",
+                text = "Obtén las coordenadas GPS del dispositivo.",
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -84,7 +84,7 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("Location permission is required")
+                        Text("Se requiere permiso de ubicación")
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = {
                             launcher.launch(
@@ -94,7 +94,7 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
                                 )
                             )
                         }) {
-                            Text("Grant Permission")
+                            Text("Otorgar Permiso")
                         }
                     }
                 }
@@ -110,16 +110,16 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
                                 location?.let {
                                     locationText = "Latitude: ${it.latitude}\nLongitude: ${it.longitude}"
                                 } ?: run {
-                                    locationText = "Unable to get location"
+                                    locationText = "No se pudo obtener ubicación"
                                 }
                             }
                         } catch (e: SecurityException) {
-                            locationText = "Permission denied"
+                            locationText = "Permiso denegado"
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Get Current Location")
+                    Text("Obtener Ubicación Actual")
                 }
 
                 if (locationText.isNotEmpty()) {
@@ -131,7 +131,7 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                text = "Current Location:",
+                                text = "Ubicación Actual:",
                                 style = MaterialTheme.typography.titleSmall
                             )
                             Spacer(modifier = Modifier.height(8.dp))
@@ -144,7 +144,7 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
             Divider()
 
             Text(
-                text = "Example Code:",
+                text = "Ejemplo de Código:",
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -156,11 +156,11 @@ fun LocationScreen(onBackClick: () -> Unit = {}) {
             ) {
                 Text(
                     text = """
-// 1. Get FusedLocationProviderClient
+// 1. Obtener FusedLocationProviderClient
 val fusedLocationClient =
     LocationServices.getFusedLocationProviderClient(context)
 
-// 2. Request current location
+// 2. Solicitar ubicación actual
 fusedLocationClient.getCurrentLocation(
     Priority.PRIORITY_HIGH_ACCURACY,
     null
@@ -171,16 +171,16 @@ fusedLocationClient.getCurrentLocation(
     }
 }
 
-// 3. Request location updates
+// 3. Solicitar actualizaciones de ubicación
 val locationRequest = LocationRequest.Builder(
     Priority.PRIORITY_HIGH_ACCURACY,
-    10000 // 10 seconds
+    10000 // 10 segundos
 ).build()
 
 val locationCallback = object : LocationCallback() {
     override fun onLocationResult(result: LocationResult) {
         for (location in result.locations) {
-            // Handle location update
+            // Manejar actualización de ubicación
         }
     }
 }
@@ -205,7 +205,7 @@ fusedLocationClient.requestLocationUpdates(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Required Permissions:",
+                        text = "Permisos Requeridos:",
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
@@ -218,7 +218,7 @@ fusedLocationClient.requestLocationUpdates(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Dependency:",
+                        text = "Dependencia:",
                         style = MaterialTheme.typography.titleSmall
                     )
                     Text(
