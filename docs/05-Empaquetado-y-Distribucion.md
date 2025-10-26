@@ -93,7 +93,7 @@ Un **keystore** es un archivo que contiene tu certificado digital para firmar ap
 
    **Si pierdes esta información, NO podrás actualizar tu app en Play Store**
 
-#### Crear Keystore con Terminal
+#### Crear Keystore con Terminal (Linux/Mac)
 
 ```bash
 keytool -genkey -v -keystore my-release-key.jks \
@@ -104,6 +104,148 @@ keytool -genkey -v -keystore my-release-key.jks \
 ```
 
 Responde las preguntas que aparecen.
+
+#### Crear Keystore con PowerShell (Windows)
+
+```powershell
+# Navegar a la carpeta del proyecto
+cd C:\ruta\a\tu\proyecto
+
+# Crear el keystore
+keytool -genkey -v -keystore my-release-key.jks `
+  -alias my-key-alias `
+  -keyalg RSA `
+  -keysize 2048 `
+  -validity 10000
+```
+
+**Notas para Windows**:
+- El comando `keytool` viene con el JDK de Android Studio
+- Si no funciona, agrega el JDK al PATH o usa la ruta completa:
+  ```powershell
+  "C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -genkey -v -keystore my-release-key.jks `
+    -alias my-key-alias `
+    -keyalg RSA `
+    -keysize 2048 `
+    -validity 10000
+  ```
+- Usa `` ` `` (backtick) al final de cada línea para continuar en la siguiente
+
+**Información que te pedirá**:
+1. **Enter keystore password**: Crea una contraseña segura (ej: `MiPassword123!`)
+2. **Re-enter password**: Confirma la contraseña
+3. **What is your first and last name?**: Tu nombre o nombre de la empresa
+4. **What is the name of your organizational unit?**: Departamento (ej: "Desarrollo")
+5. **What is the name of your organization?**: Nombre de tu empresa/proyecto
+6. **What is the name of your City or Locality?**: Tu ciudad
+7. **What is the name of your State or Province?**: Tu región
+8. **What is the two-letter country code?**: CL (para Chile)
+9. **Is CN=... correct?**: Escribe `yes` si todo está correcto
+10. **Enter key password**: Puedes presionar Enter para usar la misma contraseña del keystore
+
+⚠️ **GUARDAR ESTA INFORMACIÓN**:
+```text
+Keystore Path: C:\ruta\a\tu\proyecto\my-release-key.jks
+Keystore Password: [tu contraseña]
+Key Alias: my-key-alias
+Key Password: [tu contraseña de key]
+```
+
+**Guardar en un lugar seguro**: USB, cloud encriptado, gestor de contraseñas.
+
+#### ⚠️ Solución de Problemas: "keytool no se reconoce" en Windows
+
+Si al ejecutar `keytool` en PowerShell recibes el error:
+```
+keytool: The term 'keytool' is not recognized...
+```
+
+**Causa**: El comando `keytool` no está en el PATH de Windows.
+
+**Soluciones**:
+
+**Opción 1: Usar la ruta completa del keytool**
+
+```powershell
+# Probar esta ruta primero (Android Studio con JBR)
+& "C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -genkey -v -keystore my-release-key.jks `
+  -alias my-key-alias `
+  -keyalg RSA `
+  -keysize 2048 `
+  -validity 10000
+```
+
+**Opción 2: Agregar keytool al PATH temporalmente**
+
+```powershell
+# Agregar al PATH solo para esta sesión de PowerShell
+$env:Path += ";C:\Program Files\Android\Android Studio\jbr\bin"
+
+# Ahora puedes usar keytool normalmente
+keytool -genkey -v -keystore my-release-key.jks `
+  -alias my-key-alias `
+  -keyalg RSA `
+  -keysize 2048 `
+  -validity 10000
+```
+
+**Opción 3: Agregar keytool al PATH permanentemente**
+
+1. **Encontrar la ruta de keytool**
+
+   Busca en uno de estos directorios:
+   ```
+   C:\Program Files\Android\Android Studio\jbr\bin\
+   C:\Program Files\Java\jdk-XX\bin\
+   ```
+
+2. **Agregar al PATH del Sistema**
+
+   a) Presiona `Windows + R`
+
+   b) Escribe: `sysdm.cpl` y presiona Enter
+
+   c) Ve a la pestaña **"Opciones avanzadas"**
+
+   d) Click en **"Variables de entorno"**
+
+   e) En "Variables del sistema", busca `Path` y haz doble click
+
+   f) Click en **"Nuevo"**
+
+   g) Pega la ruta: `C:\Program Files\Android\Android Studio\jbr\bin`
+
+   h) Click en **"Aceptar"** en todas las ventanas
+
+   i) **Cierra y reabre PowerShell** para que tome efecto
+
+3. **Verificar que funciona**
+
+   ```powershell
+   # Abrir nueva ventana de PowerShell
+   keytool -version
+   ```
+
+   Deberías ver la versión de keytool.
+
+**Opción 4: Usar Command Prompt (CMD) en lugar de PowerShell**
+
+A veces funciona mejor en CMD:
+
+```cmd
+# Abrir CMD (no PowerShell)
+cd C:\ruta\a\tu\proyecto
+
+# Usar ruta completa
+"C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -genkey -v -keystore my-release-key.jks -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+```
+
+**Opción 5: Usar Android Studio directamente**
+
+Si nada de lo anterior funciona, usa la interfaz gráfica:
+1. `Build` → `Generate Signed Bundle / APK`
+2. `APK` → `Next`
+3. `Create new...` → Seguir el asistente
 
 ### Paso 2: Configurar Firma en build.gradle.kts
 
@@ -151,11 +293,114 @@ signingConfigs {
 
 ### Paso 3: Compilar Release APK
 
+#### Opción 1: Usando Android Studio (Recomendado)
+
+1. **Abrir menú Build**
+   - `Build` → `Generate Signed Bundle / APK`
+
+2. **Seleccionar formato**
+   - Selecciona `APK`
+   - Click en `Next`
+
+3. **Configurar keystore**
+   - **Key store path**: Busca tu archivo `.jks`
+   - **Key store password**: Ingresa la contraseña del keystore
+   - **Key alias**: Ingresa el alias (ej: `my-key-alias`)
+   - **Key password**: Ingresa la contraseña de la key
+   - ☑️ **Remember passwords**: (Opcional, solo en computador personal)
+   - Click en `Next`
+
+4. **Configurar build**
+   - **Destination folder**: Deja la ruta por defecto o cámbiala
+   - **Build Variants**: Selecciona `release`
+   - **Signature Versions**:
+     - ☑️ V1 (Jar Signature) - Para Android 6.0 y anteriores
+     - ☑️ V2 (Full APK Signature) - Para Android 7.0+
+   - Click en `Create`
+
+5. **Resultado**
+   - Verás una notificación cuando termine
+   - Click en `locate` para abrir la carpeta
+   - APK en: `app/release/app-release.apk`
+
+#### Opción 2: Usando Terminal/Gradle (Linux/Mac)
+
 ```bash
 ./gradlew assembleRelease
 ```
 
 APK en: `app/build/outputs/apk/release/app-release.apk`
+
+#### Opción 3: Usando PowerShell (Windows)
+
+```powershell
+# En la raíz del proyecto
+.\gradlew.bat assembleRelease
+```
+
+**Si tienes variables de entorno configuradas**:
+
+```powershell
+# Configurar variables de entorno (una sola vez por sesión)
+$env:KEYSTORE_FILE = "C:\ruta\a\tu\my-release-key.jks"
+$env:KEYSTORE_PASSWORD = "tu_password_keystore"
+$env:KEY_ALIAS = "my-key-alias"
+$env:KEY_PASSWORD = "tu_password_key"
+
+# Compilar
+.\gradlew.bat assembleRelease
+```
+
+**Verificar el APK generado**:
+
+```powershell
+# Listar archivos generados
+Get-ChildItem -Path app\build\outputs\apk\release\ -Recurse
+
+# Ver detalles del APK
+Get-Item app\build\outputs\apk\release\app-release.apk | Format-List
+```
+
+APK en: `app\build\outputs\apk\release\app-release.apk`
+
+### Paso 4: Verificar la Firma del APK
+
+Es importante verificar que el APK está correctamente firmado:
+
+#### En Windows (PowerShell)
+
+```powershell
+# Verificar firma del APK
+& "C:\Program Files\Android\Android Studio\jbr\bin\jarsigner.exe" -verify -verbose -certs app\build\outputs\apk\release\app-release.apk
+```
+
+Deberías ver:
+```
+jar verified.
+```
+
+#### En Linux/Mac
+
+```bash
+jarsigner -verify -verbose -certs app/build/outputs/apk/release/app-release.apk
+```
+
+#### Verificar información del certificado
+
+**Windows**:
+```powershell
+& "C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -list -v -keystore my-release-key.jks -alias my-key-alias
+```
+
+**Linux/Mac**:
+```bash
+keytool -list -v -keystore my-release-key.jks -alias my-key-alias
+```
+
+Verifica que:
+- El certificado es válido
+- La fecha de expiración es correcta (debe ser varios años en el futuro)
+- El alias es correcto
 
 ---
 
