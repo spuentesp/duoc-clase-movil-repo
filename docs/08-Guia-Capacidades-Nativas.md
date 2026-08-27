@@ -9,9 +9,9 @@ requeridos para cada una.
 |----------|----------|---------------------|
 | `AccelerometerScreen` | Sensores de movimiento | Ninguno |
 | `BatteryScreen` | Estado de la batería | Ninguno |
-| `BiometricScreen` | Autenticación biométrica | `USE_BIOMETRIC` |
+| `BiometricScreen` | Autenticación biométrica | Ninguno (usa `androidx.biometric`) |
 | `CameraScreen` | Captura de fotos | `CAMERA` |
-| `FlashlightScreen` | Linterna | `FLASHLIGHT` |
+| `FlashlightScreen` | Linterna | Ninguno (usa `CameraManager.setTorchMode`) |
 | `LocalStorageScreen` | Archivos locales | `READ/WRITE_EXTERNAL_STORAGE` (legacy) |
 | `LocationScreen` | GPS / ubicación | `ACCESS_FINE_LOCATION` |
 | `NotificationsScreen` | Notificaciones | `POST_NOTIFICATIONS` (Android 13+) |
@@ -47,11 +47,11 @@ devuelven valores simulados.
 `AndroidManifest.xml` ya incluye:
 
 ```xml
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.USE_BIOMETRIC" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.VIBRATE" />
-<uses-permission android:name="android.permission.FLASHLIGHT" />
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
 ## Recursos adicionales
