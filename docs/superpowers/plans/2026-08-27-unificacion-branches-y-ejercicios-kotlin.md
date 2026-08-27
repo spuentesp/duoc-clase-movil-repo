@@ -203,10 +203,10 @@ git add app/build.gradle.kts
 
 - [ ] **Step 3: Resolver conflicto en `MainActivity.kt`**
 
-Para `MainActivity.kt`, descarta AMBOS lados. En Fase 3 lo reescribiremos. Por ahora, conserva la versión de `feature/material-showcase` (la que llama al navhost del showcase):
+Para `MainActivity.kt`, descarta el lado de `native-capabilities-show` (estamos mergeando native → main, así que `--theirs` es native). Conserva el lado de `feature/material-showcase` (el que llama al NavHost del showcase). De todos modos, en Task 5 Step 4 reescribiremos `MainActivity.kt` por completo:
 
 ```bash
-git checkout --theirs app/src/main/java/com/example/baseproject/MainActivity.kt
+git checkout --ours app/src/main/java/com/example/baseproject/MainActivity.kt
 ```
 
 - [ ] **Step 4: Resolver conflicto en `WelcomeScreen.kt`**
@@ -241,7 +241,7 @@ git checkout --ours docs/06-Personalizacion-de-la-App.md
 
 - `Theme.kt`: combina cambios (probable que solo haya sido tocado por native, conservar theirs).
 - `strings.xml`: combina strings nuevos (los permisos).
-- `AndroidManifest.xml`: combina permisos nuevos de native + permisos INTERNET si los hubiera. Resultado esperado debe incluir: CAMERA, USE_BIOMETRIC, ACCESS_FINE_LOCATION, VIBRATE, FLASHLIGHT, RECEIVE_BOOT_COMPLETED.
+- `AndroidManifest.xml`: combina permisos nuevos de native + permisos INTERNET si los hubiera. Resultado esperado debe incluir (verificado contra el manifest actual de `origin/native-capabilities-show`): `CAMERA`, `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `VIBRATE`, `POST_NOTIFICATIONS`. **No** incluir `USE_BIOMETRIC`, `FLASHLIGHT` ni `RECEIVE_BOOT_COMPLETED` — la rama native no los trae y el código no los requiere (la biometría usa `androidx.biometric`, no un permiso propio).
 
 ```bash
 # Ejemplo
@@ -323,6 +323,22 @@ cd /home/sebastian/orca/duoc-clase-movil-repo
 git mv app/src/main/java/com/example/baseproject/ui/navigation/ShowcaseNavigation.kt app/src/main/java/com/example/baseproject/ui/navigation/MaterialNav.kt
 git mv app/src/main/java/com/example/baseproject/navigation/NavGraph.kt app/src/main/java/com/example/baseproject/ui/navigation/NativeNav.kt
 git mv app/src/main/java/com/example/baseproject/navigation/Screen.kt app/src/main/java/com/example/baseproject/ui/navigation/Screen.kt
+```
+
+Después del mv, renombra también las funciones internas para que coincidan con el nombre del archivo (necesario para que `RootNav` las encuentre):
+
+```bash
+# Renombrar fun ShowcaseNavigation → fun MaterialNav
+sed -i 's/^fun ShowcaseNavigation(/fun MaterialNav(/' app/src/main/java/com/example/baseproject/ui/navigation/MaterialNav.kt
+
+# Renombrar fun NavGraph → fun NativeNav
+sed -i 's/^fun NavGraph(/fun NativeNav(/' app/src/main/java/com/example/baseproject/ui/navigation/NativeNav.kt
+
+# Corregir package en Screen.kt (queda desincronizado con su nueva ubicación)
+sed -i 's|^package com.example.baseproject.navigation$|package com.example.baseproject.ui.navigation|' app/src/main/java/com/example/baseproject/ui/navigation/Screen.kt
+
+# Ajustar imports que apuntaban al paquete antiguo en NavGraph renombrado
+sed -i 's|^import com.example.baseproject.navigation\.|import com.example.baseproject.ui.navigation.|' app/src/main/java/com/example/baseproject/ui/navigation/NativeNav.kt
 ```
 
 - [ ] **Step 5: Eliminar paquete `navigation/` huérfano si quedó**
@@ -1117,7 +1133,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -1160,7 +1175,7 @@ private val SOLUCION = """
 """.trimIndent()
 
 @Composable
-fun NavigationExerciseScreen(parentNav: NavController) {
+fun NavigationExerciseScreen() {
     MiniAppScaffold(
         titulo = "4. Navegación",
         enunciado = ENUNCIADO,
@@ -1700,7 +1715,7 @@ fun ExercisesNav() {
         composable("exercises/counter") { CounterExerciseScreen() }
         composable("exercises/list") { ListExerciseScreen() }
         composable("exercises/form") { FormExerciseScreen() }
-        composable("exercises/navigation") { NavigationExerciseScreen(navController) }
+        composable("exercises/navigation") { NavigationExerciseScreen() }
         composable("exercises/viewmodel") { ViewModelExerciseScreen() }
         composable("exercises/repository") { RepositoryExerciseScreen() }
         composable("exercises/network") { NetworkExerciseScreen() }
@@ -1758,6 +1773,8 @@ rootProject.name = "kotlin-exercises"
 ```properties
 org.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8
 kotlin.code.style=official
+# Toolchain JDK 17 portable instalado en este sistema (path no estándar)
+org.gradle.java.installations.paths=/home/sebastian/.local/jdk/jdk-17.0.20.1+1
 ```
 
 - [ ] **Step 4: Crear `exercises/gradle/wrapper/gradle-wrapper.properties`**
@@ -1771,6 +1788,21 @@ validateDistributionUrl=true
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 ```
+
+- [ ] **Step 4.5: Copiar el wrapper completo desde el root del proyecto**
+
+El `gradlew`, `gradlew.bat` y `gradle/wrapper/gradle-wrapper.jar` ya existen en la raíz del proyecto Android. Cópialos al directorio `exercises/` para que `./gradlew` funcione allí:
+
+```bash
+cp gradlew exercises/gradlew
+cp gradlew.bat exercises/gradlew.bat
+cp gradle/wrapper/gradle-wrapper.jar exercises/gradle/wrapper/gradle-wrapper.jar
+chmod +x exercises/gradlew
+```
+
+Con esto `./gradlew` dentro de `exercises/` usará el wrapper del propio subdirectorio (no el del root) y `settings.gradle.kts` con `rootProject.name = "kotlin-exercises"` será el que determine qué se compila.
+
+**Importante**: el wrapper `gradlew-with-jdk` en PATH busca `gradlew` subiendo directorios. Como `exercises/gradlew` ahora existe, cuando lo invoques desde `exercises/` lo encontrará primero antes de subir al root.
 
 - [ ] **Step 5: Crear `exercises/build.gradle.kts`**
 
@@ -3405,6 +3437,9 @@ package cl.duoc.exercises._22_arquitectura_repository
 //
 // Sin Repository: ViewModel -> API (acoplado).
 // Con Repository: ViewModel -> Repository -> API/DB/Fake.
+//
+// DEMO: interface ItemRepository + dos implementaciones (Fake/Api) + un ViewModel
+// que la consume. main() muestra cómo cambiar la fuente sin tocar el ViewModel.
 
 interface ItemRepository {
     suspend fun getItems(): List<String>
@@ -3510,6 +3545,9 @@ package cl.duoc.exercises._25_arquitectura_sealed_state
 // Modelarlos como String ("loading"/"ok"/"error") es propenso a typos.
 // Modelarlos como sealed class obliga al compilador a chequear
 // exhaustividad en when.
+//
+// DEMO: sealed class con tres estados (Loading/Success/Error) + función
+// `render` con `when` exhaustivo. Ejecuta `main()`.
 
 sealed class UiState {
     data object Loading : UiState()
@@ -3518,9 +3556,9 @@ sealed class UiState {
 }
 
 fun render(state: UiState): String = when (state) {
-    isUiState.Loading -> "Cargando…"
-    isUiState.Success -> "Datos: ${state.data}"
-    isUiState.Error -> "Error: ${state.message}"
+    is UiState.Loading -> "Cargando…"
+    is UiState.Success -> "Datos: ${state.data}"
+    is UiState.Error -> "Error: ${state.message}"
 }
 // Si agregas una nueva subclase y olvidas el caso, el compilador falla.
 
