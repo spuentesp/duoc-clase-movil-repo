@@ -14,3 +14,11 @@
 .cxx
 local.properties
 .worktrees/
+
+# Libros de referencia (no se versionan; cada alumno los trae localmente)
+docs/books/
+*.epub
+
+# Builds del módulo exercises
+exercises/build/
+exercises/.gradle/
