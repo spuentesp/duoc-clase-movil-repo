@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.baseproject.ui.screens.native.FeaturesMenuScreen
 import com.example.baseproject.ui.screens.native.features.*
 
 @Composable
-fun NativeNav(navController: NavHostController) {
+fun NativeNav(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         // TODO(Task 5): reintroducir WelcomeScreen y restaurar Screen.Welcome como startDestination.
