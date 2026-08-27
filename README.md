@@ -1,142 +1,96 @@
-# Proyecto Base Android - Kotlin & Jetpack Compose
+# Duoc Clase Móvil — Recursos de Estudio Android
 
-Una plantilla de proyecto Android limpia y moderna construida con Kotlin y Jetpack Compose.
+Proyecto Android con Kotlin y Jetpack Compose, consolidado como recurso
+de estudio progresivo (de Kotlin básico a Android intermedio).
 
-## Características
+## ✨ Contenido
 
-- **Kotlin** - Lenguaje de programación moderno y conciso
-- **Jetpack Compose** - Framework de UI declarativa
-- **Material 3** -  componentes de Material Design
-- **Tema Oscuro/Claro** - Cambio automático de tema
-- **Colores Dinámicos** - Soporte para temas dinámicos de Android 12+
-- **Arquitectura Limpia** - Lista para desarrollo escalable de aplicaciones
+- 🎨 **Componentes Material Design** — catálogo visual de los componentes
+  Material 3 (botones, cards, dialogs, listas, theming, navigation, etc.).
+- 📱 **Capacidades Nativas** — pantallas de demostración de biometría,
+  cámara, linterna, GPS, sensores, notificaciones, almacenamiento local,
+  vibración.
+- 🧪 **Ejercicios Android** — 8 mini-apps para practicar Compose,
+  ViewModel, Repository, networking.
+- 📚 **Ejercicios Kotlin** (módulo hermano `exercises/`) — 33 ejercicios
+  Kotlin JVM progresivos de básico a avanzado + coroutines + arquitectura.
 
-## Estructura del Proyecto
+## 🗺️ Estructura del repo
 
 ```
-app/
-├── src/main/
-│   ├── java/com/example/baseproject/
-│   │   ├── MainActivity.kt              # Punto de entrada
-│   │   └── ui/
-│   │       ├── screens/
-│   │       │   └── WelcomeScreen.kt     # Composable de pantalla de bienvenida
-│   │       └── theme/
-│   │           ├── Color.kt             # Definiciones de colores
-│   │           ├── Theme.kt             # Tema de la aplicación
-│   │           └── Type.kt              # Tipografía
-│   └── res/
-│       ├── values/
-│       │   ├── strings.xml              # Recursos de texto
-│       │   └── themes.xml               # Temas de la aplicación
-│       └── mipmap-*/                    # Íconos de la aplicación
-└── build.gradle.kts                     # Dependencias de la aplicación
+duoc-clase-movil-repo/
+├── app/                              # Android (Compose + Material + Nativo + Ejercicios)
+│   └── src/main/java/com/example/baseproject/
+│       ├── MainActivity.kt           # aloja RootNav
+│       └── ui/
+│           ├── screens/{RootMenuScreen, material/, native/, exercises/}
+│           ├── navigation/{RootNav, MaterialNav, NativeNav, ExercisesNav}
+│           └── theme/
+├── exercises/                        # proyecto JVM hermano (Gradle independiente)
+│   ├── build.gradle.kts
+│   └── src/{main,test}/kotlin/cl/duoc/exercises/
+│       ├── _00_variables/ ... _13_exception_handling/   # Kotlin
+│       ├── _14_... _19_coroutines_*/                     # Coroutines (6)
+│       ├── _20_... _25_arquitectura_*/                   # Arquitectura (6)
+│       └── _26_... _29_android_*/ + _30_kata_integrador  # Bridge + kata
+├── docs/
+│   ├── 00-Fundamentos-Kotlin.md  → 11-Principios-de-Arquitectura.md
+│   ├── books/   # gitignored (epubs de referencia)
+│   └── README.md   # índice actualizado
+├── build.gradle.kts
+├── settings.gradle.kts
+└── README.md
 ```
 
-## Requisitos
+## 🚀 Cómo empezar
 
-- **Android Studio** Hedgehog (2023.1.1) o posterior
-- **JDK** 8 o superior
-- **SDK Mínimo** 24 (Android 7.0)
-- **SDK Objetivo** 34 (Android 14)
+### Requisitos
 
-## Comenzando
+- Android Studio Hedgehog (2023.1.1) o posterior.
+- JDK 17+ (para el módulo `exercises/`).
+- SDK mínimo 24, target 34.
 
-### 1. Clonar el Repositorio
+### Clonar y abrir
 
 ```bash
-git clone <url-de-tu-repositorio>
+git clone <url>
 cd duoc-clase-movil-repo
+# Abre la carpeta en Android Studio.
 ```
 
-### 2. Abrir en Android Studio
+### Correr la app
 
-1. Abre Android Studio
-2. Selecciona "Abrir un Proyecto Existente"
-3. Navega al repositorio clonado
-4. Espera a que se complete la sincronización de Gradle
+Con un emulador o dispositivo conectado:
 
-### 3. Ejecutar la Aplicación
+1. Sincroniza Gradle.
+2. Run → Run 'app'.
+3. La app abre en el menú raíz con 3 secciones.
 
-1. Conecta un dispositivo Android o inicia un emulador
-2. Haz clic en el botón "Run" (ícono de play verde)
-3. Selecciona tu dispositivo/emulador
-4. La aplicación se compilará e iniciará
-
-## Personalización
-
-### Cambiar el Nombre del Paquete
-
-1. En Android Studio, haz clic derecho en el paquete `com.example.baseproject`
-2. Selecciona "Refactor" → "Rename"
-3. Actualiza el nombre del paquete
-4. Actualiza `namespace` en [app/build.gradle.kts](app/build.gradle.kts)
-5. Actualiza `package` en [AndroidManifest.xml](app/src/main/AndroidManifest.xml)
-
-### Cambiar el Nombre de la Aplicación
-
-Edita `app_name` en [strings.xml](app/src/main/res/values/strings.xml):
-
-```xml
-<string name="app_name">Nombre de Tu Aplicación</string>
-```
-
-### Personalizar los Colores del Tema
-
-Edita los colores en [Color.kt](app/src/main/java/com/example/baseproject/ui/theme/Color.kt):
-
-```kotlin
-val Purple40 = Color(0xFF6650a4)  // Color primario
-val PurpleGrey40 = Color(0xFF625b71)  // Color secundario
-val Pink40 = Color(0xFF7D5260)  // Color terciario
-```
-
-### Agregar Íconos de Lanzamiento
-
-1. Haz clic derecho en la carpeta `res` en Android Studio
-2. Selecciona "New" → "Image Asset"
-3. Sigue el asistente para generar íconos
-4. O usa la herramienta en línea: https://romannurik.github.io/AndroidAssetStudio/
-
-## Dependencias
-
-- **Compose BOM**: 2023.10.01
-- **Material 3**: Última versión
-- **Kotlin**: 1.9.20
-- **Android Gradle Plugin**: 8.2.0
-
-## Compilación para Producción
-
-### Compilación de Depuración
+### Correr los ejercicios Kotlin
 
 ```bash
-./gradlew assembleDebug
+cd exercises
+./gradlew test
 ```
 
-### Compilación de Lanzamiento
+Los tests fallarán hasta que implementes las funciones — eso es parte
+del aprendizaje. Ver [docs/09-Guia-Ejercicios-Kotlin.md](docs/09-Guia-Ejercicios-Kotlin.md).
 
-```bash
-./gradlew assembleRelease
-```
+## 📖 Rutas de aprendizaje
 
-El APK estará en `app/build/outputs/apk/`
+- **Si nunca programaste**: [docs/README.md](docs/README.md) tiene la
+  ruta detallada semana por semana.
+- **Si ya sabes Kotlin**: ve directo a [docs/01-Composables.md](docs/01-Composables.md)
+  y a las mini-apps dentro de la app.
 
-## Próximos Pasos
+## 🤝 Contribuir
 
-- Agregar navegación (Jetpack Navigation Compose)
-- Implementar ViewModel y gestión de estado
-- Agregar inyección de dependencias (Hilt/Koin)
-- Configurar networking (Retrofit/Ktor)
-- Agregar base de datos local (Room)
-- Configurar CI/CD
+- Issues y PRs bienvenidos.
+- Nuevas mini-apps: crea un paquete en `app/src/main/java/.../exercises/`
+  y registra la ruta en `ExercisesNav.kt`.
+- Nuevos ejercicios Kotlin: crea un paquete en `exercises/src/main/kotlin/...`
+  con su test hermano.
 
-## Licencia
+## 📜 Licencia
 
-Este es un proyecto de plantilla base. Úsalo libremente para tus propios proyectos.
-
-## Soporte
-
-Para problemas o preguntas sobre desarrollo Android:
-- [Android Developers](https://developer.android.com/)
-- [Documentación de Jetpack Compose](https://developer.android.com/jetpack/compose)
-- [Documentación de Kotlin](https://kotlinlang.org/docs/home.html)
+Plantilla de uso libre para fines educativos.
