@@ -7,19 +7,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.baseproject.ui.screens.WelcomeScreen
-import com.example.baseproject.ui.theme.BaseAndroidProjectTheme
+import com.example.baseproject.ui.navigation.ShowcaseNavigation
+import com.example.baseproject.ui.theme.BaseProjectTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BaseAndroidProjectTheme {
+            BaseProjectTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    WelcomeScreen()
+                    ShowcaseNavigation()
                 }
             }
         }

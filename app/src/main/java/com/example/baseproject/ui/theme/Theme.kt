@@ -57,3 +57,13 @@ fun BaseAndroidProjectTheme(
         content = content
     )
 }
+
+// Alias for backward compatibility
+@Composable
+fun BaseProjectTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    BaseAndroidProjectTheme(darkTheme, dynamicColor, content)
+}
