@@ -22,3 +22,7 @@ docs/books/
 # Builds del módulo exercises
 exercises/build/
 exercises/.gradle/
+
+# Artefactos de proceso SDD (locales, no se versionan)
+.git-backup/
+.superpowers/
