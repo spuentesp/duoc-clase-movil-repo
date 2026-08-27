@@ -1,0 +1,2685 @@
+# Review package: ba77c02..HEAD (regenerado)
+
+## Commits
+
+63ae3a9 Merge: integrar capacidades nativas + guía 08
+09ca5a2 Add comprehensive guide for Android app packaging and distribution
+88c3378 feat: Add screens for Biometric Authentication, Camera, Flashlight, Local Storage, Location, Notifications, and Vibration features
+
+## Files changed
+
+ GUIA_CARACTERISTICAS_NATIVAS.md                    | 255 +++++++++++++++++++++
+ app/build.gradle.kts                               |  17 +-
+ app/src/main/AndroidManifest.xml                   |  17 ++
+ .../com/example/baseproject/navigation/NavGraph.kt |  90 ++++++++
+ .../com/example/baseproject/navigation/Screen.kt   |  15 ++
+ .../baseproject/ui/screens/FeaturesMenuScreen.kt   | 169 ++++++++++++++
+ .../ui/screens/features/AccelerometerScreen.kt     | 176 ++++++++++++++
+ .../ui/screens/features/BatteryScreen.kt           | 198 ++++++++++++++++
+ .../ui/screens/features/BiometricScreen.kt         | 252 ++++++++++++++++++++
+ .../ui/screens/features/CameraScreen.kt            | 231 +++++++++++++++++++
+ .../ui/screens/features/FlashlightScreen.kt        | 140 +++++++++++
+ .../ui/screens/features/LocalStorageScreen.kt      | 240 +++++++++++++++++++
+ .../ui/screens/features/LocationScreen.kt          | 233 +++++++++++++++++++
+ .../ui/screens/features/NotificationsScreen.kt     | 233 +++++++++++++++++++
+ .../ui/screens/features/VibrationScreen.kt         | 248 ++++++++++++++++++++
+ app/src/main/res/values/strings.xml                |  10 +-
+ 16 files changed, 2516 insertions(+), 8 deletions(-)
+
+## Diff
+
+diff --git a/GUIA_CARACTERISTICAS_NATIVAS.md b/GUIA_CARACTERISTICAS_NATIVAS.md
+new file mode 100644
+index 0000000..83477a3
+--- /dev/null
++++ b/GUIA_CARACTERISTICAS_NATIVAS.md
+@@ -0,0 +1,255 @@
++# Guía de Características Nativas
++
++Esta rama demuestra cómo acceder a características nativas de Android usando Kotlin y Jetpack Compose.
++
++## Estructura del Proyecto
++
++```
++app/src/main/java/com/example/baseproject/
++├── MainActivity.kt                          # Punto de entrada de la app con Navegación
++├── navigation/
++│   ├── NavGraph.kt                         # Definición del grafo de navegación
++│   └── Screen.kt                           # Clase sellada de rutas de pantallas
++├── ui/
++│   ├── screens/
++│   │   ├── WelcomeScreen.kt               # Pantalla de inicio
++│   │   ├── FeaturesMenuScreen.kt          # Menú con todas las características nativas
++│   │   └── features/
++│   │       ├── VibrationScreen.kt         # Demo de API de vibración
++│   │       ├── LocalStorageScreen.kt      # Demo de DataStore
++│   │       ├── BiometricScreen.kt         # Demo de autenticación biométrica
++│   │       ├── CameraScreen.kt            # Demo de acceso a cámara
++│   │       ├── FlashlightScreen.kt        # Demo de control de linterna
++│   │       ├── AccelerometerScreen.kt     # Demo de sensores de movimiento
++│   │       ├── BatteryScreen.kt           # Demo de información de batería
++│   │       ├── LocationScreen.kt          # Demo de GPS/Ubicación
++│   │       └── NotificationsScreen.kt     # Demo de notificaciones locales
++│   └── theme/
++│       ├── Color.kt
++│       ├── Theme.kt
++│       └── Type.kt
++```
++
++## Características Nativas Disponibles
++
++### 1. Vibración
++- **Pantalla**: [VibrationScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/VibrationScreen.kt)
++- **Permiso**: `VIBRATE`
++- **Funcionalidades**:
++  - Vibración simple
++  - Vibración con patrón (ejemplo SOS)
++  - Efectos de clic
++  - Efectos de clic fuerte
++
++### 2. Almacenamiento Local (DataStore)
++- **Pantalla**: [LocalStorageScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/LocalStorageScreen.kt)
++- **Permiso**: Ninguno
++- **Dependencias**: `androidx.datastore:datastore-preferences`
++- **Funcionalidades**:
++  - Guardar pares clave-valor
++  - Leer datos almacenados
++  - Limpiar almacenamiento
++  - Flujo de datos reactivo
++
++### 3. Autenticación Biométrica
++- **Pantalla**: [BiometricScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/BiometricScreen.kt)
++- **Permiso**: Ninguno (el usuario debe registrar datos biométricos)
++- **Dependencias**: `androidx.biometric:biometric`
++- **Funcionalidades**:
++  - Autenticación por huella digital
++  - Reconocimiento facial
++  - Credenciales del dispositivo como respaldo
++  - Verificación de disponibilidad biométrica
++
++### 4. Cámara
++- **Pantalla**: [CameraScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/CameraScreen.kt)
++- **Permiso**: `CAMERA`
++- **Dependencias**: Librerías CameraX
++- **Funcionalidades**:
++  - Vista previa de cámara
++  - Manejo de permisos
++  - Selección de cámara frontal/trasera
++
++### 5. Linterna
++- **Pantalla**: [FlashlightScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/FlashlightScreen.kt)
++- **Permiso**: Ninguno
++- **Funcionalidades**:
++  - Encender/apagar linterna
++  - Control de alternancia simple
++
++### 6. Acelerómetro
++- **Pantalla**: [AccelerometerScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/AccelerometerScreen.kt)
++- **Permiso**: Ninguno
++- **Funcionalidades**:
++  - Leer valores de aceleración X, Y, Z
++  - Actualizaciones de sensor en tiempo real
++  - Gestión del ciclo de vida del sensor
++
++### 7. Batería
++- **Pantalla**: [BatteryScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/BatteryScreen.kt)
++- **Permiso**: Ninguno
++- **Funcionalidades**:
++  - Nivel de batería
++  - Estado de carga
++  - Salud de la batería
++  - Temperatura y voltaje
++
++### 8. Ubicación (GPS)
++- **Pantalla**: [LocationScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/LocationScreen.kt)
++- **Permisos**: `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`
++- **Dependencias**: `play-services-location`
++- **Funcionalidades**:
++  - Obtener ubicación actual
++  - Latitud y longitud
++  - Manejo de permisos
++
++### 9. Notificaciones
++- **Pantalla**: [NotificationsScreen.kt](app/src/main/java/com/example/baseproject/ui/screens/features/NotificationsScreen.kt)
++- **Permiso**: `POST_NOTIFICATIONS` (Android 13+)
++- **Funcionalidades**:
++  - Notificaciones simples
++  - Notificaciones con acciones
++  - Canales de notificación
++  - Manejo de permisos
++
++## Cómo Usar
++
++1. **Ejecutar la app** en un dispositivo físico o emulador
++2. **Hacer clic en "Comenzar"** en la pantalla de bienvenida
++3. **Seleccionar una característica** del menú de características
++4. **Otorgar permisos** cuando se solicite
++5. **Probar la característica** usando los botones provistos
++6. **Revisar los ejemplos de código** mostrados en cada pantalla
++
++## Ruta de Aprendizaje
++
++Para estudiantes que aprenden desarrollo Android:
++
++1. Comenzar con **Vibración** - API simple, sin permisos complejos
++2. Probar **Linterna** - Otra característica simple
++3. Pasar a **Batería** - Información del sistema de solo lectura
++4. Aprender **Almacenamiento Local** - Esencial para cualquier app
++5. Explorar **Acelerómetro** - Fundamentos de sensores
++6. Practicar **Notificaciones** - Interacción con el usuario
++7. Abordar **Cámara** - Complejo pero gratificante
++8. Dominar **Ubicación** - Casos de uso del mundo real
++9. Finalmente **Biométrica** - Seguridad avanzada
++
++## Patrones de Código
++
++Cada pantalla de característica sigue este patrón:
++
++```kotlin
++@Composable
++fun FeatureScreen(onBackClick: () -> Unit = {}) {
++    // 1. Gestión de estado
++    var featureState by remember { mutableStateOf(...) }
++
++    // 2. Manejo de permisos (si es necesario)
++    val launcher = rememberLauncherForActivityResult(...)
++
++    // 3. UI con Scaffold
++    Scaffold(
++        topBar = { TopAppBar con botón de regreso }
++    ) {
++        Column {
++            // Descripción de la característica
++            // Controles interactivos
++            // Mostrar resultados
++            // Ejemplo de código
++            // Información de permisos/dependencias
++        }
++    }
++}
++```
++
++## Resumen de Permisos
++
++Agregar estos permisos a [AndroidManifest.xml](app/src/main/AndroidManifest.xml):
++
++```xml
++<!-- Permisos requeridos -->
++<uses-permission android:name="android.permission.VIBRATE" />
++<uses-permission android:name="android.permission.CAMERA" />
++<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
++<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
++<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
++```
++
++## Resumen de Dependencias
++
++Todas las dependencias están en [build.gradle.kts](app/build.gradle.kts):
++
++```kotlin
++// Navegación
++implementation("androidx.navigation:navigation-compose:2.7.5")
++
++// Biométrica
++implementation("androidx.biometric:biometric:1.2.0-alpha05")
++
++// Cámara
++implementation("androidx.camera:camera-camera2:1.3.0")
++implementation("androidx.camera:camera-lifecycle:1.3.0")
++implementation("androidx.camera:camera-view:1.3.0")
++
++// DataStore
++implementation("androidx.datastore:datastore-preferences:1.0.0")
++
++// Ubicación
++implementation("com.google.android.gms:play-services-location:21.0.1")
++```
++
++## Flujo de Navegación
++
++```
++PantallaBienvenida
++    ↓ (Comenzar)
++PantallaMenuCaracteristicas
++    ↓ (Seleccionar característica)
++Pantalla de Característica Individual
++    ↓ (Botón atrás)
++PantallaMenuCaracteristicas
++```
++
++## Consejos para Estudiantes
++
++1. **Leer los ejemplos de código** en cada pantalla - están listos para producción
++2. **Probar en dispositivos reales** cuando sea posible - los emuladores tienen limitaciones
++3. **Manejar permisos correctamente** - usar los patrones mostrados
++4. **Verificar versiones de Android** - algunas características requieren niveles de API específicos
++5. **Experimentar** - modificar el código para aprender cómo funciona
++6. **Combinar características** - construir algo que use múltiples capacidades
++
++## Problemas Comunes
++
++### Cámara no funciona en emulador
++- Usar un dispositivo físico o asegurar que el AVD tenga cámara habilitada
++
++### Ubicación no se actualiza
++- Habilitar servicios de ubicación en configuración del dispositivo
++- Otorgar permisos de ubicación
++- Para emulador: enviar ubicación via controles extendidos
++
++### Biométrica no disponible
++- Usuario debe registrar huella/cara en configuración del dispositivo
++- No todos los emuladores soportan biométrica
++
++### Notificaciones no se muestran
++- Verificar permisos de notificación (Android 13+)
++- Asegurar que el canal de notificación esté creado
++- Verificar configuración de notificaciones del dispositivo
++
++## Próximos Pasos
++
++- Combinar múltiples características en una sola app
++- Agregar manejo de errores adecuado
++- Implementar arquitectura MVVM
++- Agregar pruebas unitarias para ViewModels
++- Crear diseños de UI personalizados
++- Integrar con APIs backend
++
++## Recursos
++
++- [Documentación de Android Developers](https://developer.android.com/)
++- [Guía de Jetpack Compose](https://developer.android.com/jetpack/compose)
++- [Componentes de Material 3](https://m3.material.io/)
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+index 2da8460..d18518b 100644
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -61,25 +61,36 @@ dependencies {
+     implementation("androidx.activity:activity-compose:1.8.1")
+ 
+     // Compose dependencies
+     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+     implementation("androidx.compose.ui:ui")
+     implementation("androidx.compose.ui:ui-graphics")
+     implementation("androidx.compose.ui:ui-tooling-preview")
+     implementation("androidx.compose.material3:material3")
+     implementation("androidx.compose.material:material-icons-extended")
+ 
+-    // Navigation Compose
++    // Navigation
+     implementation("androidx.navigation:navigation-compose:2.7.5")
+ 
+-    // Navigation Compose
+-    implementation("androidx.navigation:navigation-compose:2.7.5")
++    // Biometric
++    implementation("androidx.biometric:biometric:1.2.0-alpha05")
++
++    // Camera
++    implementation("androidx.camera:camera-camera2:1.3.0")
++    implementation("androidx.camera:camera-lifecycle:1.3.0")
++    implementation("androidx.camera:camera-view:1.3.0")
++
++    // DataStore for local storage
++    implementation("androidx.datastore:datastore-preferences:1.0.0")
++
++    // Location
++    implementation("com.google.android.gms:play-services-location:21.0.1")
+ 
+     // Testing dependencies
+     testImplementation("junit:junit:4.13.2")
+     testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.20")
+     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+     testImplementation("io.mockk:mockk:1.13.8")
+ 
+     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+     androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 41370d4..5b74122 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -1,13 +1,30 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ 
++    <!-- Vibration permission -->
++    <uses-permission android:name="android.permission.VIBRATE" />
++
++    <!-- Camera permission -->
++    <uses-permission android:name="android.permission.CAMERA" />
++
++    <!-- Location permissions -->
++    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
++    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
++
++    <!-- Notification permission (Android 13+) -->
++    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
++
++    <!-- Camera features -->
++    <uses-feature android:name="android.hardware.camera" android:required="false" />
++    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
++
+     <application
+         android:allowBackup="true"
+         android:icon="@mipmap/ic_launcher"
+         android:label="@string/app_name"
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/Theme.BaseAndroidProject">
+         <activity
+             android:name=".MainActivity"
+             android:exported="true"
+diff --git a/app/src/main/java/com/example/baseproject/navigation/NavGraph.kt b/app/src/main/java/com/example/baseproject/navigation/NavGraph.kt
+new file mode 100644
+index 0000000..475c685
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/navigation/NavGraph.kt
+@@ -0,0 +1,90 @@
++package com.example.baseproject.navigation
++
++import androidx.compose.runtime.Composable
++import androidx.navigation.NavHostController
++import androidx.navigation.compose.NavHost
++import androidx.navigation.compose.composable
++import com.example.baseproject.ui.screens.WelcomeScreen
++import com.example.baseproject.ui.screens.FeaturesMenuScreen
++import com.example.baseproject.ui.screens.features.*
++
++@Composable
++fun NavGraph(navController: NavHostController) {
++    NavHost(
++        navController = navController,
++        startDestination = Screen.Welcome.route
++    ) {
++        composable(Screen.Welcome.route) {
++            WelcomeScreen(
++                onGetStartedClick = {
++                    navController.navigate(Screen.FeaturesMenu.route)
++                }
++            )
++        }
++
++        composable(Screen.FeaturesMenu.route) {
++            FeaturesMenuScreen(
++                onFeatureClick = { route ->
++                    navController.navigate(route)
++                },
++                onBackClick = {
++                    navController.popBackStack()
++                }
++            )
++        }
++
++        composable(Screen.Vibration.route) {
++            VibrationScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.LocalStorage.route) {
++            LocalStorageScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Biometric.route) {
++            BiometricScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Camera.route) {
++            CameraScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Flashlight.route) {
++            FlashlightScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Accelerometer.route) {
++            AccelerometerScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Battery.route) {
++            BatteryScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Location.route) {
++            LocationScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++
++        composable(Screen.Notifications.route) {
++            NotificationsScreen(
++                onBackClick = { navController.popBackStack() }
++            )
++        }
++    }
++}
+diff --git a/app/src/main/java/com/example/baseproject/navigation/Screen.kt b/app/src/main/java/com/example/baseproject/navigation/Screen.kt
+new file mode 100644
+index 0000000..adec3d4
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/navigation/Screen.kt
+@@ -0,0 +1,15 @@
++package com.example.baseproject.navigation
++
++sealed class Screen(val route: String) {
++    object Welcome : Screen("welcome")
++    object FeaturesMenu : Screen("features_menu")
++    object Vibration : Screen("vibration")
++    object LocalStorage : Screen("local_storage")
++    object Biometric : Screen("biometric")
++    object Camera : Screen("camera")
++    object Flashlight : Screen("flashlight")
++    object Accelerometer : Screen("accelerometer")
++    object Battery : Screen("battery")
++    object Location : Screen("location")
++    object Notifications : Screen("notifications")
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/FeaturesMenuScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/FeaturesMenuScreen.kt
+new file mode 100644
+index 0000000..eeb65a7
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/FeaturesMenuScreen.kt
+@@ -0,0 +1,169 @@
++package com.example.baseproject.ui.screens
++
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.lazy.grid.GridCells
++import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
++import androidx.compose.foundation.lazy.grid.items
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.*
++import androidx.compose.material3.*
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.graphics.vector.ImageVector
++import androidx.compose.ui.text.style.TextAlign
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
++import com.example.baseproject.navigation.Screen
++import com.example.baseproject.ui.theme.BaseAndroidProjectTheme
++
++data class NativeFeature(
++    val name: String,
++    val icon: ImageVector,
++    val route: String,
++    val description: String
++)
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun FeaturesMenuScreen(
++    onFeatureClick: (String) -> Unit = {},
++    onBackClick: () -> Unit = {}
++) {
++    val features = listOf(
++        NativeFeature(
++            name = "Vibración",
++            icon = Icons.Default.PhoneAndroid,
++            route = Screen.Vibration.route,
++            description = "Probar patrones de vibración"
++        ),
++        NativeFeature(
++            name = "Almacenamiento",
++            icon = Icons.Default.Storage,
++            route = Screen.LocalStorage.route,
++            description = "Guardar y recuperar datos localmente"
++        ),
++        NativeFeature(
++            name = "Biométrica",
++            icon = Icons.Default.Fingerprint,
++            route = Screen.Biometric.route,
++            description = "Autenticación por huella y rostro"
++        ),
++        NativeFeature(
++            name = "Cámara",
++            icon = Icons.Default.CameraAlt,
++            route = Screen.Camera.route,
++            description = "Acceder a la cámara del dispositivo"
++        ),
++        NativeFeature(
++            name = "Linterna",
++            icon = Icons.Default.FlashlightOn,
++            route = Screen.Flashlight.route,
++            description = "Controlar la linterna del dispositivo"
++        ),
++        NativeFeature(
++            name = "Acelerómetro",
++            icon = Icons.Default.ScreenRotation,
++            route = Screen.Accelerometer.route,
++            description = "Leer datos del sensor de movimiento"
++        ),
++        NativeFeature(
++            name = "Batería",
++            icon = Icons.Default.BatteryFull,
++            route = Screen.Battery.route,
++            description = "Ver estado y nivel de batería"
++        ),
++        NativeFeature(
++            name = "Ubicación",
++            icon = Icons.Default.LocationOn,
++            route = Screen.Location.route,
++            description = "Obtener coordenadas GPS"
++        ),
++        NativeFeature(
++            name = "Notificaciones",
++            icon = Icons.Default.Notifications,
++            route = Screen.Notifications.route,
++            description = "Enviar notificaciones locales"
++        )
++    )
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Características Nativas") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        LazyVerticalGrid(
++            columns = GridCells.Fixed(2),
++            contentPadding = PaddingValues(16.dp),
++            horizontalArrangement = Arrangement.spacedBy(16.dp),
++            verticalArrangement = Arrangement.spacedBy(16.dp),
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++        ) {
++            items(features) { feature ->
++                FeatureCard(
++                    feature = feature,
++                    onClick = { onFeatureClick(feature.route) }
++                )
++            }
++        }
++    }
++}
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun FeatureCard(
++    feature: NativeFeature,
++    onClick: () -> Unit
++) {
++    Card(
++        onClick = onClick,
++        modifier = Modifier
++            .fillMaxWidth()
++            .height(160.dp)
++    ) {
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(16.dp),
++            horizontalAlignment = Alignment.CenterHorizontally,
++            verticalArrangement = Arrangement.Center
++        ) {
++            Icon(
++                imageVector = feature.icon,
++                contentDescription = feature.name,
++                modifier = Modifier.size(48.dp),
++                tint = MaterialTheme.colorScheme.primary
++            )
++            Spacer(modifier = Modifier.height(12.dp))
++            Text(
++                text = feature.name,
++                style = MaterialTheme.typography.titleMedium,
++                textAlign = TextAlign.Center
++            )
++            Spacer(modifier = Modifier.height(4.dp))
++            Text(
++                text = feature.description,
++                style = MaterialTheme.typography.bodySmall,
++                textAlign = TextAlign.Center,
++                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
++            )
++        }
++    }
++}
++
++@Preview(showBackground = true)
++@Composable
++fun FeaturesMenuScreenPreview() {
++    BaseAndroidProjectTheme {
++        FeaturesMenuScreen()
++    }
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/AccelerometerScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/AccelerometerScreen.kt
+new file mode 100644
+index 0000000..9037570
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/AccelerometerScreen.kt
+@@ -0,0 +1,176 @@
++package com.example.baseproject.ui.screens.features
++
++import android.content.Context
++import android.hardware.Sensor
++import android.hardware.SensorEvent
++import android.hardware.SensorEventListener
++import android.hardware.SensorManager
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun AccelerometerScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var x by remember { mutableStateOf(0f) }
++    var y by remember { mutableStateOf(0f) }
++    var z by remember { mutableStateOf(0f) }
++    var isListening by remember { mutableStateOf(false) }
++
++    val sensorManager = remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
++    val accelerometer = remember { sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) }
++
++    val sensorListener = remember {
++        object : SensorEventListener {
++            override fun onSensorChanged(event: SensorEvent?) {
++                event?.let {
++                    x = it.values[0]
++                    y = it.values[1]
++                    z = it.values[2]
++                }
++            }
++
++            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
++        }
++    }
++
++    DisposableEffect(isListening) {
++        if (isListening && accelerometer != null) {
++            sensorManager.registerListener(
++                sensorListener,
++                accelerometer,
++                SensorManager.SENSOR_DELAY_NORMAL
++            )
++        }
++        onDispose {
++            sensorManager.unregisterListener(sensorListener)
++        }
++    }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Acelerómetro") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Sensor de Acelerómetro",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Lee datos del sensor de movimiento y orientación.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            Button(
++                onClick = { isListening = !isListening },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text(if (isListening) "Stop Reading" else "Start Reading")
++            }
++
++            if (isListening) {
++                Card(
++                    modifier = Modifier.fillMaxWidth(),
++                    colors = CardDefaults.cardColors(
++                        containerColor = MaterialTheme.colorScheme.primaryContainer
++                    )
++                ) {
++                    Column(modifier = Modifier.padding(16.dp)) {
++                        Text(
++                            text = "Valores del Acelerómetro:",
++                            style = MaterialTheme.typography.titleMedium
++                        )
++                        Spacer(modifier = Modifier.height(8.dp))
++                        Text("X: ${String.format("%.2f", x)} m/s²")
++                        Text("Y: ${String.format("%.2f", y)} m/s²")
++                        Text("Z: ${String.format("%.2f", z)} m/s²")
++                    }
++                }
++            }
++
++            Divider()
++
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// 1. Obtener gestor de sensores
++val sensorManager = context.getSystemService(
++    Context.SENSOR_SERVICE
++) as SensorManager
++
++// 2. Obtener sensor del acelerómetro
++val accelerometer = sensorManager.getDefaultSensor(
++    Sensor.TYPE_ACCELEROMETER
++)
++
++// 3. Crear listener del sensor
++val listener = object : SensorEventListener {
++    override fun onSensorChanged(event: SensorEvent?) {
++        event?.let {
++            val x = it.values[0]  // Eje X
++            val y = it.values[1]  // Eje Y
++            val z = it.values[2]  // Eje Z
++        }
++    }
++
++    override fun onAccuracyChanged(
++        sensor: Sensor?,
++        accuracy: Int
++    ) {}
++}
++
++// 4. Registrar listener
++sensorManager.registerListener(
++    listener,
++    accelerometer,
++    SensorManager.SENSOR_DELAY_NORMAL
++)
++
++// 5. Desregistrar cuando termine
++sensorManager.unregisterListener(listener)
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++        }
++    }
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/BatteryScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/BatteryScreen.kt
+new file mode 100644
+index 0000000..2950b1e
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/BatteryScreen.kt
+@@ -0,0 +1,198 @@
++package com.example.baseproject.ui.screens.features
++
++import android.content.Context
++import android.content.Intent
++import android.content.IntentFilter
++import android.os.BatteryManager
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun BatteryScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var batteryInfo by remember { mutableStateOf(getBatteryInfo(context)) }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Estado de Batería") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Información de Batería",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Monitorea el nivel de batería y estado de carga.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            Button(
++                onClick = { batteryInfo = getBatteryInfo(context) },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Actualizar Info de Batería")
++            }
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.primaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
++                    Text(
++                        text = "Estado de Batería",
++                        style = MaterialTheme.typography.titleMedium
++                    )
++                    Text("Nivel: ${batteryInfo.level}%")
++                    Text("Estado: ${batteryInfo.status}")
++                    Text("Cargando: ${if (batteryInfo.isCharging) "Sí" else "No"}")
++                    Text("Salud: ${batteryInfo.health}")
++                    Text("Temperatura: ${batteryInfo.temperature}°C")
++                    Text("Voltaje: ${batteryInfo.voltage}mV")
++                }
++            }
++
++            Divider()
++
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// Obtener el gestor de batería
++val batteryManager = context.getSystemService(
++    Context.BATTERY_SERVICE
++) as BatteryManager
++
++// Obtener nivel de batería
++val level = batteryManager.getIntProperty(
++    BatteryManager.BATTERY_PROPERTY_CAPACITY
++)
++
++// Alternativa: Usar BroadcastReceiver
++val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
++val batteryStatus = context.registerReceiver(null, filter)
++
++batteryStatus?.let { intent ->
++    val level = intent.getIntExtra(
++        BatteryManager.EXTRA_LEVEL, -1
++    )
++    val scale = intent.getIntExtra(
++        BatteryManager.EXTRA_SCALE, -1
++    )
++    val batteryPct = level * 100 / scale.toFloat()
++
++    val status = intent.getIntExtra(
++        BatteryManager.EXTRA_STATUS, -1
++    )
++    val isCharging = status ==
++        BatteryManager.BATTERY_STATUS_CHARGING ||
++        status == BatteryManager.BATTERY_STATUS_FULL
++}
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Nota:",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = "¡No se requieren permisos especiales para info de batería!",
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                }
++            }
++        }
++    }
++}
++
++data class BatteryInfo(
++    val level: Int,
++    val status: String,
++    val isCharging: Boolean,
++    val health: String,
++    val temperature: Float,
++    val voltage: Int
++)
++
++private fun getBatteryInfo(context: Context): BatteryInfo {
++    val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
++    val batteryStatus = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
++
++    val level = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
++
++    val status = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
++    val statusText = when (status) {
++        BatteryManager.BATTERY_STATUS_CHARGING -> "Cargando"
++        BatteryManager.BATTERY_STATUS_DISCHARGING -> "Descargando"
++        BatteryManager.BATTERY_STATUS_FULL -> "Completa"
++        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "No Cargando"
++        else -> "Desconocido"
++    }
++
++    val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
++            status == BatteryManager.BATTERY_STATUS_FULL
++
++    val health = batteryStatus?.getIntExtra(BatteryManager.EXTRA_HEALTH, -1) ?: -1
++    val healthText = when (health) {
++        BatteryManager.BATTERY_HEALTH_GOOD -> "Buena"
++        BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Sobrecalentando"
++        BatteryManager.BATTERY_HEALTH_DEAD -> "Muerta"
++        BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "Sobrevoltaje"
++        BatteryManager.BATTERY_HEALTH_COLD -> "Fría"
++        else -> "Desconocido"
++    }
++
++    val temperature = (batteryStatus?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) ?: 0) / 10f
++    val voltage = batteryStatus?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) ?: 0
++
++    return BatteryInfo(level, statusText, isCharging, healthText, temperature, voltage)
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/BiometricScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/BiometricScreen.kt
+new file mode 100644
+index 0000000..85f0155
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/BiometricScreen.kt
+@@ -0,0 +1,252 @@
++package com.example.baseproject.ui.screens.features
++
++import androidx.biometric.BiometricManager
++import androidx.biometric.BiometricPrompt
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++import androidx.core.content.ContextCompat
++import androidx.fragment.app.FragmentActivity
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun BiometricScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var authResult by remember { mutableStateOf("") }
++    var biometricAvailability by remember { mutableStateOf("") }
++
++    LaunchedEffect(Unit) {
++        val biometricManager = BiometricManager.from(context)
++        biometricAvailability = when (biometricManager.canAuthenticate(
++            BiometricManager.Authenticators.BIOMETRIC_STRONG or
++            BiometricManager.Authenticators.DEVICE_CREDENTIAL
++        )) {
++            BiometricManager.BIOMETRIC_SUCCESS -> "Autenticación biométrica disponible"
++            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> "Sin hardware biométrico"
++            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> "Hardware biométrico no disponible"
++            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> "Sin datos biométricos registrados"
++            else -> "Estado desconocido"
++        }
++    }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Autenticación Biométrica") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Autenticación Biométrica",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Usa huella digital o reconocimiento facial para autenticación.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            // Tarjeta de estado
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.secondaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Estado del Dispositivo:",
++                        style = MaterialTheme.typography.titleSmall,
++                        color = MaterialTheme.colorScheme.onSecondaryContainer
++                    )
++                    Spacer(modifier = Modifier.height(8.dp))
++                    Text(
++                        text = biometricAvailability,
++                        style = MaterialTheme.typography.bodyMedium,
++                        color = MaterialTheme.colorScheme.onSecondaryContainer
++                    )
++                }
++            }
++
++            // Botón autenticar
++            Button(
++                onClick = {
++                    authenticateWithBiometric(
++                        context as FragmentActivity,
++                        onSuccess = { authResult = "✓ ¡Autenticación exitosa!" },
++                        onError = { error -> authResult = "✗ Error: $error" },
++                        onFailed = { authResult = "✗ Autenticación falló" }
++                    )
++                },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Autenticar con Biométrica")
++            }
++
++            // Mostrar resultado
++            if (authResult.isNotEmpty()) {
++                Card(
++                    modifier = Modifier.fillMaxWidth(),
++                    colors = CardDefaults.cardColors(
++                        containerColor = if (authResult.startsWith("✓"))
++                            MaterialTheme.colorScheme.primaryContainer
++                        else
++                            MaterialTheme.colorScheme.errorContainer
++                    )
++                ) {
++                    Text(
++                        text = authResult,
++                        modifier = Modifier.padding(16.dp),
++                        style = MaterialTheme.typography.bodyMedium
++                    )
++                }
++            }
++
++            Divider()
++
++            // Ejemplo de código
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// 1. Verificar disponibilidad biométrica
++val biometricManager = BiometricManager.from(context)
++val canAuthenticate = biometricManager.canAuthenticate(
++    BiometricManager.Authenticators.BIOMETRIC_STRONG
++)
++
++// 2. Crear información del prompt
++val promptInfo = BiometricPrompt.PromptInfo.Builder()
++    .setTitle("Biometric Authentication")
++    .setSubtitle("Confirm your identity")
++    .setNegativeButtonText("Cancel")
++    .build()
++
++// 3. Crear callback
++val callback = object : BiometricPrompt.AuthenticationCallback() {
++    override fun onAuthenticationSucceeded(
++        result: BiometricPrompt.AuthenticationResult
++    ) {
++        // Autenticación exitosa
++    }
++
++    override fun onAuthenticationFailed() {
++        // Autenticación falló
++    }
++
++    override fun onAuthenticationError(
++        errorCode: Int,
++        errString: CharSequence
++    ) {
++        // Error de autenticación
++    }
++}
++
++// 4. Mostrar prompt biométrico
++val biometricPrompt = BiometricPrompt(
++    activity,
++    executor,
++    callback
++)
++biometricPrompt.authenticate(promptInfo)
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            // Nota de dependencia
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Dependencia Requerida:",
++                        style = MaterialTheme.typography.titleSmall,
++                        color = MaterialTheme.colorScheme.onTertiaryContainer
++                    )
++                    Text(
++                        text = "implementation(\"androidx.biometric:biometric:1.2.0-alpha05\")",
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall,
++                        color = MaterialTheme.colorScheme.onTertiaryContainer
++                    )
++                }
++            }
++        }
++    }
++}
++
++private fun authenticateWithBiometric(
++    activity: FragmentActivity,
++    onSuccess: () -> Unit,
++    onError: (String) -> Unit,
++    onFailed: () -> Unit
++) {
++    val executor = ContextCompat.getMainExecutor(activity)
++
++    val biometricPrompt = BiometricPrompt(
++        activity,
++        executor,
++        object : BiometricPrompt.AuthenticationCallback() {
++            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
++                super.onAuthenticationSucceeded(result)
++                onSuccess()
++            }
++
++            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
++                super.onAuthenticationError(errorCode, errString)
++                onError(errString.toString())
++            }
++
++            override fun onAuthenticationFailed() {
++                super.onAuthenticationFailed()
++                onFailed()
++            }
++        }
++    )
++
++    val promptInfo = BiometricPrompt.PromptInfo.Builder()
++        .setTitle("Biometric Authentication")
++        .setSubtitle("Confirm your identity to continue")
++        .setNegativeButtonText("Cancel")
++        .build()
++
++    biometricPrompt.authenticate(promptInfo)
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/CameraScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/CameraScreen.kt
+new file mode 100644
+index 0000000..7007a22
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/CameraScreen.kt
+@@ -0,0 +1,231 @@
++package com.example.baseproject.ui.screens.features
++
++import android.Manifest
++import android.content.pm.PackageManager
++import androidx.activity.compose.rememberLauncherForActivityResult
++import androidx.activity.result.contract.ActivityResultContracts
++import androidx.camera.core.CameraSelector
++import androidx.camera.core.Preview
++import androidx.camera.lifecycle.ProcessCameraProvider
++import androidx.camera.view.PreviewView
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material.icons.filled.CameraAlt
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.platform.LocalLifecycleOwner
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++import androidx.compose.ui.viewinterop.AndroidView
++import androidx.core.content.ContextCompat
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun CameraScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var hasCameraPermission by remember {
++        mutableStateOf(
++            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
++                    PackageManager.PERMISSION_GRANTED
++        )
++    }
++    var showCamera by remember { mutableStateOf(false) }
++
++    val launcher = rememberLauncherForActivityResult(
++        contract = ActivityResultContracts.RequestPermission()
++    ) { isGranted ->
++        hasCameraPermission = isGranted
++    }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Cámara") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Acceso a Cámara",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            if (!hasCameraPermission) {
++                Card(
++                    modifier = Modifier.fillMaxWidth(),
++                    colors = CardDefaults.cardColors(
++                        containerColor = MaterialTheme.colorScheme.errorContainer
++                    )
++                ) {
++                    Column(
++                        modifier = Modifier.padding(16.dp),
++                        horizontalAlignment = Alignment.CenterHorizontally
++                    ) {
++                        Text("Se requiere permiso de cámara")
++                        Spacer(modifier = Modifier.height(8.dp))
++                        Button(onClick = {
++                            launcher.launch(Manifest.permission.CAMERA)
++                        }) {
++                            Text("Otorgar Permiso")
++                        }
++                    }
++                }
++            } else {
++                Button(
++                    onClick = { showCamera = !showCamera },
++                    modifier = Modifier.fillMaxWidth()
++                ) {
++                    Icon(Icons.Default.CameraAlt, contentDescription = null)
++                    Spacer(modifier = Modifier.width(8.dp))
++                    Text(if (showCamera) "Hide Camera" else "Show Camera Preview")
++                }
++
++                if (showCamera) {
++                    CameraPreview(
++                        modifier = Modifier
++                            .fillMaxWidth()
++                            .height(300.dp)
++                    )
++                }
++            }
++
++            Divider()
++
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// 1. Solicitar permiso de cámara
++val launcher = rememberLauncherForActivityResult(
++    ActivityResultContracts.RequestPermission()
++) { isGranted ->
++    hasCameraPermission = isGranted
++}
++launcher.launch(Manifest.permission.CAMERA)
++
++// 2. Configurar vista previa de cámara
++val cameraProviderFuture =
++    ProcessCameraProvider.getInstance(context)
++
++cameraProviderFuture.addListener({
++    val cameraProvider = cameraProviderFuture.get()
++
++    val preview = Preview.Builder().build()
++    val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
++
++    preview.setSurfaceProvider(
++        previewView.surfaceProvider
++    )
++
++    cameraProvider.bindToLifecycle(
++        lifecycleOwner,
++        cameraSelector,
++        preview
++    )
++}, executor)
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Permiso Requerido:",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = "<uses-permission android:name=\"android.permission.CAMERA\" />",
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                    Spacer(modifier = Modifier.height(8.dp))
++                    Text(
++                        text = "Dependencias:",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = """
++implementation("androidx.camera:camera-camera2:1.3.0")
++implementation("androidx.camera:camera-lifecycle:1.3.0")
++implementation("androidx.camera:camera-view:1.3.0")
++                        """.trimIndent(),
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                }
++            }
++        }
++    }
++}
++
++@Composable
++fun CameraPreview(modifier: Modifier = Modifier) {
++    val context = LocalContext.current
++    val lifecycleOwner = LocalLifecycleOwner.current
++
++    AndroidView(
++        modifier = modifier,
++        factory = { ctx ->
++            val previewView = PreviewView(ctx)
++            val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
++
++            cameraProviderFuture.addListener({
++                val cameraProvider = cameraProviderFuture.get()
++
++                val preview = Preview.Builder().build().also {
++                    it.setSurfaceProvider(previewView.surfaceProvider)
++                }
++
++                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
++
++                try {
++                    cameraProvider.unbindAll()
++                    cameraProvider.bindToLifecycle(
++                        lifecycleOwner,
++                        cameraSelector,
++                        preview
++                    )
++                } catch (exc: Exception) {
++                    // Manejar excepción
++                }
++            }, ContextCompat.getMainExecutor(ctx))
++
++            previewView
++        }
++    )
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/FlashlightScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/FlashlightScreen.kt
+new file mode 100644
+index 0000000..b475a9b
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/FlashlightScreen.kt
+@@ -0,0 +1,140 @@
++package com.example.baseproject.ui.screens.features
++
++import android.content.Context
++import android.hardware.camera2.CameraManager
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material.icons.filled.FlashlightOff
++import androidx.compose.material.icons.filled.FlashlightOn
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun FlashlightScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var isFlashlightOn by remember { mutableStateOf(false) }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Linterna") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Control de Linterna",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Controla la linterna del dispositivo.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            Button(
++                onClick = {
++                    toggleFlashlight(context, !isFlashlightOn)
++                    isFlashlightOn = !isFlashlightOn
++                },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Icon(
++                    imageVector = if (isFlashlightOn) Icons.Default.FlashlightOff else Icons.Default.FlashlightOn,
++                    contentDescription = null
++                )
++                Spacer(modifier = Modifier.width(8.dp))
++                Text(if (isFlashlightOn) "Turn OFF Flashlight" else "Turn ON Flashlight")
++            }
++
++            Divider()
++
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// Obtener el gestor de cámara
++val cameraManager = context.getSystemService(
++    Context.CAMERA_SERVICE
++) as CameraManager
++
++// Obtener ID de cámara (usually "0" is back camera)
++val cameraId = cameraManager.cameraIdList[0]
++
++// Encender linterna
++cameraManager.setTorchMode(cameraId, true)
++
++// Apagar linterna
++cameraManager.setTorchMode(cameraId, false)
++
++// Verificar si la linterna está disponible
++val hasFlash = context.packageManager
++    .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Nota:",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = "¡No se requieren permisos especiales para controlar la linterna!",
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                }
++            }
++        }
++    }
++}
++
++private fun toggleFlashlight(context: Context, turnOn: Boolean) {
++    try {
++        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
++        val cameraId = cameraManager.cameraIdList[0]
++        cameraManager.setTorchMode(cameraId, turnOn)
++    } catch (e: Exception) {
++        e.printStackTrace()
++    }
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/LocalStorageScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/LocalStorageScreen.kt
+new file mode 100644
+index 0000000..b8c417b
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/LocalStorageScreen.kt
+@@ -0,0 +1,240 @@
++package com.example.baseproject.ui.screens.features
++
++import android.content.Context
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++import androidx.datastore.core.DataStore
++import androidx.datastore.preferences.core.Preferences
++import androidx.datastore.preferences.core.edit
++import androidx.datastore.preferences.core.stringPreferencesKey
++import androidx.datastore.preferences.preferencesDataStore
++import kotlinx.coroutines.flow.first
++import kotlinx.coroutines.flow.map
++import kotlinx.coroutines.launch
++
++// Propiedad de extensión para DataStore
++val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun LocalStorageScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    val scope = rememberCoroutineScope()
++
++    var inputText by remember { mutableStateOf("") }
++    var storedValue by remember { mutableStateOf("") }
++
++    // Cargar valor almacenado al componer
++    LaunchedEffect(Unit) {
++        storedValue = readFromDataStore(context)
++    }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Almacenamiento Local") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Almacenamiento Local (DataStore)",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Guarda y recupera datos localmente usando DataStore Preferences.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            // Campo de entrada
++            OutlinedTextField(
++                value = inputText,
++                onValueChange = { inputText = it },
++                label = { Text("Ingresa texto para guardar") },
++                modifier = Modifier.fillMaxWidth()
++            )
++
++            // Botón guardar
++            Button(
++                onClick = {
++                    scope.launch {
++                        saveToDataStore(context, inputText)
++                        storedValue = inputText
++                        inputText = ""
++                    }
++                },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Guardar en DataStore")
++            }
++
++            // Mostrar valor almacenado
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.secondaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Valor Almacenado:",
++                        style = MaterialTheme.typography.titleSmall,
++                        color = MaterialTheme.colorScheme.onSecondaryContainer
++                    )
++                    Spacer(modifier = Modifier.height(8.dp))
++                    Text(
++                        text = storedValue.ifEmpty { "No data saved yet" },
++                        style = MaterialTheme.typography.bodyMedium,
++                        color = MaterialTheme.colorScheme.onSecondaryContainer
++                    )
++                }
++            }
++
++            // Botón leer
++            Button(
++                onClick = {
++                    scope.launch {
++                        storedValue = readFromDataStore(context)
++                    }
++                },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Recargar desde DataStore")
++            }
++
++            // Botón limpiar
++            OutlinedButton(
++                onClick = {
++                    scope.launch {
++                        clearDataStore(context)
++                        storedValue = ""
++                    }
++                },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Limpiar DataStore")
++            }
++
++            Divider()
++
++            // Ejemplo de código
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// 1. Crear extensión DataStore
++val Context.dataStore: DataStore<Preferences> by
++    preferencesDataStore(name = "settings")
++
++// 2. Definir clave de preferencia
++val USER_NAME_KEY = stringPreferencesKey("user_name")
++
++// 3. Escribir datos
++suspend fun saveData(context: Context, value: String) {
++    context.dataStore.edit { preferences ->
++        preferences[USER_NAME_KEY] = value
++    }
++}
++
++// 4. Leer datos
++suspend fun readData(context: Context): String {
++    val preferences = context.dataStore.data.first()
++    return preferences[USER_NAME_KEY] ?: "default"
++}
++
++// 5. O usar Flow para actualizaciones reactivas
++val userNameFlow: Flow<String> = context.dataStore.data
++    .map { preferences ->
++        preferences[USER_NAME_KEY] ?: "default"
++    }
++
++// 6. Limpiar datos
++suspend fun clearData(context: Context) {
++    context.dataStore.edit { preferences ->
++        preferences.clear()
++    }
++}
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            // Nota de dependencia
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Dependencia Requerida:",
++                        style = MaterialTheme.typography.titleSmall,
++                        color = MaterialTheme.colorScheme.onTertiaryContainer
++                    )
++                    Text(
++                        text = "implementation(\"androidx.datastore:datastore-preferences:1.0.0\")",
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall,
++                        color = MaterialTheme.colorScheme.onTertiaryContainer
++                    )
++                }
++            }
++        }
++    }
++}
++
++// DataStore helper functions
++private val SAMPLE_KEY = stringPreferencesKey("sample_text")
++
++private suspend fun saveToDataStore(context: Context, value: String) {
++    context.dataStore.edit { preferences ->
++        preferences[SAMPLE_KEY] = value
++    }
++}
++
++private suspend fun readFromDataStore(context: Context): String {
++    val preferences = context.dataStore.data.first()
++    return preferences[SAMPLE_KEY] ?: ""
++}
++
++private suspend fun clearDataStore(context: Context) {
++    context.dataStore.edit { preferences ->
++        preferences.clear()
++    }
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/LocationScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/LocationScreen.kt
+new file mode 100644
+index 0000000..91c3432
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/LocationScreen.kt
+@@ -0,0 +1,233 @@
++package com.example.baseproject.ui.screens.features
++
++import android.Manifest
++import android.content.pm.PackageManager
++import androidx.activity.compose.rememberLauncherForActivityResult
++import androidx.activity.result.contract.ActivityResultContracts
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++import androidx.core.content.ContextCompat
++import com.google.android.gms.location.LocationServices
++import com.google.android.gms.location.Priority
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun LocationScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var hasLocationPermission by remember {
++        mutableStateOf(
++            ContextCompat.checkSelfPermission(
++                context,
++                Manifest.permission.ACCESS_FINE_LOCATION
++            ) == PackageManager.PERMISSION_GRANTED
++        )
++    }
++    var locationText by remember { mutableStateOf("") }
++
++    val launcher = rememberLauncherForActivityResult(
++        contract = ActivityResultContracts.RequestMultiplePermissions()
++    ) { permissions ->
++        hasLocationPermission = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
++                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
++    }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Ubicación / GPS") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Servicios de Ubicación",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Obtén las coordenadas GPS del dispositivo.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            if (!hasLocationPermission) {
++                Card(
++                    modifier = Modifier.fillMaxWidth(),
++                    colors = CardDefaults.cardColors(
++                        containerColor = MaterialTheme.colorScheme.errorContainer
++                    )
++                ) {
++                    Column(
++                        modifier = Modifier.padding(16.dp),
++                        horizontalAlignment = Alignment.CenterHorizontally
++                    ) {
++                        Text("Se requiere permiso de ubicación")
++                        Spacer(modifier = Modifier.height(8.dp))
++                        Button(onClick = {
++                            launcher.launch(
++                                arrayOf(
++                                    Manifest.permission.ACCESS_FINE_LOCATION,
++                                    Manifest.permission.ACCESS_COARSE_LOCATION
++                                )
++                            )
++                        }) {
++                            Text("Otorgar Permiso")
++                        }
++                    }
++                }
++            } else {
++                Button(
++                    onClick = {
++                        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
++                        try {
++                            fusedLocationClient.getCurrentLocation(
++                                Priority.PRIORITY_HIGH_ACCURACY,
++                                null
++                            ).addOnSuccessListener { location ->
++                                location?.let {
++                                    locationText = "Latitude: ${it.latitude}\nLongitude: ${it.longitude}"
++                                } ?: run {
++                                    locationText = "No se pudo obtener ubicación"
++                                }
++                            }
++                        } catch (e: SecurityException) {
++                            locationText = "Permiso denegado"
++                        }
++                    },
++                    modifier = Modifier.fillMaxWidth()
++                ) {
++                    Text("Obtener Ubicación Actual")
++                }
++
++                if (locationText.isNotEmpty()) {
++                    Card(
++                        modifier = Modifier.fillMaxWidth(),
++                        colors = CardDefaults.cardColors(
++                            containerColor = MaterialTheme.colorScheme.primaryContainer
++                        )
++                    ) {
++                        Column(modifier = Modifier.padding(16.dp)) {
++                            Text(
++                                text = "Ubicación Actual:",
++                                style = MaterialTheme.typography.titleSmall
++                            )
++                            Spacer(modifier = Modifier.height(8.dp))
++                            Text(text = locationText)
++                        }
++                    }
++                }
++            }
++
++            Divider()
++
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// 1. Obtener FusedLocationProviderClient
++val fusedLocationClient =
++    LocationServices.getFusedLocationProviderClient(context)
++
++// 2. Solicitar ubicación actual
++fusedLocationClient.getCurrentLocation(
++    Priority.PRIORITY_HIGH_ACCURACY,
++    null
++).addOnSuccessListener { location ->
++    location?.let {
++        val latitude = it.latitude
++        val longitude = it.longitude
++    }
++}
++
++// 3. Solicitar actualizaciones de ubicación
++val locationRequest = LocationRequest.Builder(
++    Priority.PRIORITY_HIGH_ACCURACY,
++    10000 // 10 segundos
++).build()
++
++val locationCallback = object : LocationCallback() {
++    override fun onLocationResult(result: LocationResult) {
++        for (location in result.locations) {
++            // Manejar actualización de ubicación
++        }
++    }
++}
++
++fusedLocationClient.requestLocationUpdates(
++    locationRequest,
++    locationCallback,
++    Looper.getMainLooper()
++)
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Permisos Requeridos:",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = """
++<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
++<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
++                        """.trimIndent(),
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                    Spacer(modifier = Modifier.height(8.dp))
++                    Text(
++                        text = "Dependencia:",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = "implementation(\"com.google.android.gms:play-services-location:21.0.1\")",
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                }
++            }
++        }
++    }
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/NotificationsScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/NotificationsScreen.kt
+new file mode 100644
+index 0000000..ad769af
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/NotificationsScreen.kt
+@@ -0,0 +1,233 @@
++package com.example.baseproject.ui.screens.features
++
++import android.Manifest
++import android.app.NotificationChannel
++import android.app.NotificationManager
++import android.content.Context
++import android.content.pm.PackageManager
++import android.os.Build
++import androidx.activity.compose.rememberLauncherForActivityResult
++import androidx.activity.result.contract.ActivityResultContracts
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.*
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++import androidx.core.app.NotificationCompat
++import androidx.core.app.NotificationManagerCompat
++import androidx.core.content.ContextCompat
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun NotificationsScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++    var hasNotificationPermission by remember {
++        mutableStateOf(
++            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
++                ContextCompat.checkSelfPermission(
++                    context,
++                    Manifest.permission.POST_NOTIFICATIONS
++                ) == PackageManager.PERMISSION_GRANTED
++            } else {
++                true
++            }
++        )
++    }
++
++    val launcher = rememberLauncherForActivityResult(
++        contract = ActivityResultContracts.RequestPermission()
++    ) { isGranted ->
++        hasNotificationPermission = isGranted
++    }
++
++    LaunchedEffect(Unit) {
++        createNotificationChannel(context)
++    }
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Notificaciones") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "Notificaciones Locales",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Envía notificaciones push locales al usuario.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !hasNotificationPermission) {
++                Card(
++                    modifier = Modifier.fillMaxWidth(),
++                    colors = CardDefaults.cardColors(
++                        containerColor = MaterialTheme.colorScheme.errorContainer
++                    )
++                ) {
++                    Column(
++                        modifier = Modifier.padding(16.dp),
++                        horizontalAlignment = Alignment.CenterHorizontally
++                    ) {
++                        Text("Se requiere permiso de notificación (Android 13+)")
++                        Spacer(modifier = Modifier.height(8.dp))
++                        Button(onClick = {
++                            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
++                        }) {
++                            Text("Otorgar Permiso")
++                        }
++                    }
++                }
++            }
++
++            Button(
++                onClick = { sendSimpleNotification(context) },
++                modifier = Modifier.fillMaxWidth(),
++                enabled = hasNotificationPermission
++            ) {
++                Text("Enviar Notificación Simple")
++            }
++
++            Button(
++                onClick = { sendNotificationWithAction(context) },
++                modifier = Modifier.fillMaxWidth(),
++                enabled = hasNotificationPermission
++            ) {
++                Text("Enviar Notificación con Acción")
++            }
++
++            Divider()
++
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// 1. Crear canal de notificación (Android 8.0+)
++val channelId = "my_channel"
++if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++    val channel = NotificationChannel(
++        channelId,
++        "Channel Name",
++        NotificationManager.IMPORTANCE_DEFAULT
++    )
++    val notificationManager = context.getSystemService(
++        Context.NOTIFICATION_SERVICE
++    ) as NotificationManager
++    notificationManager.createNotificationChannel(channel)
++}
++
++// 2. Construir notificación
++val notification = NotificationCompat.Builder(context, channelId)
++    .setSmallIcon(R.drawable.ic_launcher_foreground)
++    .setContentTitle("Notification Title")
++    .setContentText("This is the notification content")
++    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
++    .build()
++
++// 3. Mostrar notificación
++NotificationManagerCompat.from(context)
++    .notify(notificationId, notification)
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Required Permission (Android 13+):",
++                        style = MaterialTheme.typography.titleSmall
++                    )
++                    Text(
++                        text = "<uses-permission android:name=\"android.permission.POST_NOTIFICATIONS\" />",
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall
++                    )
++                }
++            }
++        }
++    }
++}
++
++private const val CHANNEL_ID = "base_project_channel"
++
++private fun createNotificationChannel(context: Context) {
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++        val name = "Base Project Notifications"
++        val descriptionText = "Notifications from Base Project"
++        val importance = NotificationManager.IMPORTANCE_DEFAULT
++        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
++            description = descriptionText
++        }
++        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
++        notificationManager.createNotificationChannel(channel)
++    }
++}
++
++private fun sendSimpleNotification(context: Context) {
++    val notification = NotificationCompat.Builder(context, CHANNEL_ID)
++        .setSmallIcon(android.R.drawable.ic_dialog_info)
++        .setContentTitle("Simple Notification")
++        .setContentText("This is a simple notification from the app!")
++        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
++        .build()
++
++    NotificationManagerCompat.from(context).notify(1, notification)
++}
++
++private fun sendNotificationWithAction(context: Context) {
++    val notification = NotificationCompat.Builder(context, CHANNEL_ID)
++        .setSmallIcon(android.R.drawable.ic_dialog_info)
++        .setContentTitle("Notification with Action")
++        .setContentText("This notification has an action button!")
++        .setPriority(NotificationCompat.PRIORITY_HIGH)
++        .addAction(
++            android.R.drawable.ic_menu_view,
++            "Action",
++            null
++        )
++        .build()
++
++    NotificationManagerCompat.from(context).notify(2, notification)
++}
+diff --git a/app/src/main/java/com/example/baseproject/ui/screens/features/VibrationScreen.kt b/app/src/main/java/com/example/baseproject/ui/screens/features/VibrationScreen.kt
+new file mode 100644
+index 0000000..d54018a
+--- /dev/null
++++ b/app/src/main/java/com/example/baseproject/ui/screens/features/VibrationScreen.kt
+@@ -0,0 +1,248 @@
++package com.example.baseproject.ui.screens.features
++
++import android.content.Context
++import android.os.Build
++import android.os.VibrationEffect
++import android.os.Vibrator
++import android.os.VibratorManager
++import androidx.compose.foundation.layout.*
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.*
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.text.font.FontFamily
++import androidx.compose.ui.unit.dp
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun VibrationScreen(onBackClick: () -> Unit = {}) {
++    val context = LocalContext.current
++
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                title = { Text("Vibración") },
++                navigationIcon = {
++                    IconButton(onClick = onBackClick) {
++                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás")
++                    }
++                }
++            )
++        }
++    ) { paddingValues ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(paddingValues)
++                .padding(16.dp)
++                .verticalScroll(rememberScrollState()),
++            verticalArrangement = Arrangement.spacedBy(16.dp)
++        ) {
++            Text(
++                text = "API de Vibración",
++                style = MaterialTheme.typography.headlineSmall
++            )
++
++            Text(
++                text = "Prueba diferentes patrones de vibración en tu dispositivo.",
++                style = MaterialTheme.typography.bodyMedium
++            )
++
++            Divider()
++
++            // Vibración simple
++            Button(
++                onClick = { vibrateSimple(context) },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Vibración Simple (500ms)")
++            }
++
++            // Vibración con patrón
++            Button(
++                onClick = { vibratePattern(context) },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Vibración con Patrón (SOS)")
++            }
++
++            // Efecto de clic
++            Button(
++                onClick = { vibrateClick(context) },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Efecto de Clic")
++            }
++
++            // Efecto de clic fuerte
++            Button(
++                onClick = { vibrateHeavyClick(context) },
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text("Efecto de Clic Fuerte")
++            }
++
++            Divider()
++
++            // Ejemplo de código
++            Text(
++                text = "Ejemplo de Código:",
++                style = MaterialTheme.typography.titleMedium
++            )
++
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.surfaceVariant
++                )
++            ) {
++                Text(
++                    text = """
++// Obtener el servicio de vibrador
++val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++    val vibratorManager = context.getSystemService(
++        Context.VIBRATOR_MANAGER_SERVICE
++    ) as VibratorManager
++    vibratorManager.defaultVibrator
++} else {
++    @Suppress("DEPRECATION")
++    context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
++}
++
++// Vibración simple (500ms)
++if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++    vibrator.vibrate(
++        VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
++    )
++} else {
++    @Suppress("DEPRECATION")
++    vibrator.vibrate(500)
++}
++
++// Vibración con patrón (retraso, vibrar, retraso, vibrar...)
++val pattern = longArrayOf(0, 200, 100, 300, 100, 200)
++if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++    vibrator.vibrate(
++        VibrationEffect.createWaveform(pattern, -1)
++    )
++} else {
++    @Suppress("DEPRECATION")
++    vibrator.vibrate(pattern, -1)
++}
++
++// Efecto de clic (API 29+)
++if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
++    vibrator.vibrate(
++        VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
++    )
++}
++                    """.trimIndent(),
++                    modifier = Modifier.padding(16.dp),
++                    fontFamily = FontFamily.Monospace,
++                    style = MaterialTheme.typography.bodySmall
++                )
++            }
++
++            // Nota de permisos
++            Card(
++                modifier = Modifier.fillMaxWidth(),
++                colors = CardDefaults.cardColors(
++                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
++                )
++            ) {
++                Column(modifier = Modifier.padding(16.dp)) {
++                    Text(
++                        text = "Permiso Requerido:",
++                        style = MaterialTheme.typography.titleSmall,
++                        color = MaterialTheme.colorScheme.onTertiaryContainer
++                    )
++                    Text(
++                        text = "<uses-permission android:name=\"android.permission.VIBRATE\" />",
++                        fontFamily = FontFamily.Monospace,
++                        style = MaterialTheme.typography.bodySmall,
++                        color = MaterialTheme.colorScheme.onTertiaryContainer
++                    )
++                }
++            }
++        }
++    }
++}
++
++private fun vibrateSimple(context: Context) {
++    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++        val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
++        vibratorManager.defaultVibrator
++    } else {
++        @Suppress("DEPRECATION")
++        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
++    }
++
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
++    } else {
++        @Suppress("DEPRECATION")
++        vibrator.vibrate(500)
++    }
++}
++
++private fun vibratePattern(context: Context) {
++    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++        val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
++        vibratorManager.defaultVibrator
++    } else {
++        @Suppress("DEPRECATION")
++        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
++    }
++
++    // Patrón SOS: ... --- ...
++    val pattern = longArrayOf(0, 200, 100, 200, 100, 200, 100, 500, 100, 500, 100, 500, 100, 200, 100, 200, 100, 200)
++
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++        vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
++    } else {
++        @Suppress("DEPRECATION")
++        vibrator.vibrate(pattern, -1)
++    }
++}
++
++private fun vibrateClick(context: Context) {
++    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++        val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
++        vibratorManager.defaultVibrator
++    } else {
++        @Suppress("DEPRECATION")
++        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
++    }
++
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
++        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
++    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
++    } else {
++        @Suppress("DEPRECATION")
++        vibrator.vibrate(50)
++    }
++}
++
++private fun vibrateHeavyClick(context: Context) {
++    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
++        val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
++        vibratorManager.defaultVibrator
++    } else {
++        @Suppress("DEPRECATION")
++        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
++    }
++
++    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
++        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
++    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++        vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
++    } else {
++        @Suppress("DEPRECATION")
++        vibrator.vibrate(100)
++    }
++}
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+index 8965691..5321497 100644
+--- a/app/src/main/res/values/strings.xml
++++ b/app/src/main/res/values/strings.xml
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <string name="app_name">Base Android Project</string>
+-    <string name="welcome_title">Welcome!</string>
+-    <string name="welcome_subtitle">This is your base Android project</string>
+-    <string name="welcome_description">Built with Kotlin and Jetpack Compose. Start building your amazing app from here.</string>
+-    <string name="get_started">Get Started</string>
++    <string name="app_name">Proyecto Base Android</string>
++    <string name="welcome_title">¡Bienvenido!</string>
++    <string name="welcome_subtitle">Este es tu proyecto base de Android</string>
++    <string name="welcome_description">Construido con Kotlin y Jetpack Compose. Comienza a construir tu increíble app desde aquí.</string>
++    <string name="get_started">Comenzar</string>
+ </resources>

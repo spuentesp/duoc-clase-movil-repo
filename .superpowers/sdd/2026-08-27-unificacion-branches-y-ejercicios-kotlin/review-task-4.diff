@@ -1,0 +1,140 @@
+# Review package: 63ae3a9..HEAD
+
+## Commits
+
+94eb75c refactor: reorganizar screens/ en material/ y native/
+
+## Files changed
+
+ .../java/com/example/baseproject/MainActivity.kt   |  4 +-
+ .../{ShowcaseNavigation.kt => MaterialNav.kt}      | 26 +++----
+ .../NavGraph.kt => ui/navigation/NativeNav.kt}     | 20 ++----
+ .../baseproject/{ => ui}/navigation/Screen.kt      |  2 +-
+ .../baseproject/ui/screens/WelcomeScreen.kt        | 83 ----------------------
+ .../ui/screens/{ => material}/MainScreen.kt        |  2 +-
+ .../ui/screens/{ => material}/ShowcaseCategory.kt  |  2 +-
+ .../{ => material}/appbars/AppBarsScreen.kt        |  4 +-
+ .../bottomsheets/BottomSheetsScreen.kt             |  4 +-
+ .../{ => material}/buttons/ButtonsScreen.kt        |  2 +-
+ .../ui/screens/{ => material}/cards/CardsScreen.kt |  4 +-
+ .../{ => material}/dialogs/DialogsScreen.kt        |  4 +-
+ .../ui/screens/{ => material}/icons/IconsScreen.kt |  4 +-
+ .../ui/screens/{ => material}/lists/ListsScreen.kt |  4 +-
+ .../{ => material}/navigation/NavigationScreen.kt  |  4 +-
+ .../selectioncontrols/SelectionControlsScreen.kt   |  4 +-
+ .../{ => material}/textfields/TextFieldsScreen.kt  |  4 +-
+ .../{ => material}/theming/ThemingScreen.kt        |  4 +-
+ .../ui/screens/{ => native}/FeaturesMenuScreen.kt  |  4 +-
+ .../{ => native}/features/AccelerometerScreen.kt   |  2 +-
+ .../screens/{ => native}/features/BatteryScreen.kt |  2 +-
+ .../{ => native}/features/BiometricScreen.kt       |  2 +-
+ .../screens/{ => native}/features/CameraScreen.kt  |  2 +-
+ .../{ => native}/features/FlashlightScreen.kt      |  2 +-
+ .../{ => native}/features/LocalStorageScreen.kt    |  2 +-
+ .../{ => native}/features/LocationScreen.kt        |  2 +-
+ .../{ => native}/features/NotificationsScreen.kt   |  2 +-
+ .../{ => native}/features/VibrationScreen.kt       |  2 +-
+ 28 files changed, 56 insertions(+), 147 deletions(-)
+
+## Diff (primeras 100 líneas)
+
+diff --git a/app/src/main/java/com/example/baseproject/MainActivity.kt b/app/src/main/java/com/example/baseproject/MainActivity.kt
+index 15001e9..e558056 100644
+--- a/app/src/main/java/com/example/baseproject/MainActivity.kt
++++ b/app/src/main/java/com/example/baseproject/MainActivity.kt
+@@ -1,27 +1,27 @@
+ package com.example.baseproject
+ 
+ import android.os.Bundle
+ import androidx.activity.ComponentActivity
+ import androidx.activity.compose.setContent
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.material3.MaterialTheme
+ import androidx.compose.material3.Surface
+ import androidx.compose.ui.Modifier
+-import com.example.baseproject.ui.navigation.ShowcaseNavigation
++import com.example.baseproject.ui.navigation.MaterialNav
+ import com.example.baseproject.ui.theme.BaseProjectTheme
+ 
+ class MainActivity : ComponentActivity() {
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContent {
+             BaseProjectTheme {
+                 Surface(
+                     modifier = Modifier.fillMaxSize(),
+                     color = MaterialTheme.colorScheme.background
+                 ) {
+-                    ShowcaseNavigation()
++                    MaterialNav()
+                 }
+             }
+         }
+     }
+ }
+diff --git a/app/src/main/java/com/example/baseproject/ui/navigation/ShowcaseNavigation.kt b/app/src/main/java/com/example/baseproject/ui/navigation/MaterialNav.kt
+similarity index 82%
+rename from app/src/main/java/com/example/baseproject/ui/navigation/ShowcaseNavigation.kt
+rename to app/src/main/java/com/example/baseproject/ui/navigation/MaterialNav.kt
+index c5a847b..b61e26f 100644
+--- a/app/src/main/java/com/example/baseproject/ui/navigation/ShowcaseNavigation.kt
++++ b/app/src/main/java/com/example/baseproject/ui/navigation/MaterialNav.kt
+@@ -1,29 +1,29 @@
+ package com.example.baseproject.ui.navigation
+ 
+ import androidx.compose.runtime.Composable
+ import androidx.navigation.NavHostController
+ import androidx.navigation.compose.NavHost
+ import androidx.navigation.compose.composable
+ import androidx.navigation.compose.rememberNavController
+-import com.example.baseproject.ui.screens.MainScreen
+-import com.example.baseproject.ui.screens.appbars.AppBarsScreen
+-import com.example.baseproject.ui.screens.bottomsheets.BottomSheetsScreen
+-import com.example.baseproject.ui.screens.buttons.ButtonsScreen
+-import com.example.baseproject.ui.screens.cards.CardsScreen
+-import com.example.baseproject.ui.screens.dialogs.DialogsScreen
+-import com.example.baseproject.ui.screens.icons.IconsScreen
+-import com.example.baseproject.ui.screens.lists.ListsScreen
+-import com.example.baseproject.ui.screens.navigation.NavigationScreen
+-import com.example.baseproject.ui.screens.selectioncontrols.SelectionControlsScreen
+-import com.example.baseproject.ui.screens.textfields.TextFieldsScreen
+-import com.example.baseproject.ui.screens.theming.ThemingScreen
++import com.example.baseproject.ui.screens.material.MainScreen
++import com.example.baseproject.ui.screens.material.appbars.AppBarsScreen
++import com.example.baseproject.ui.screens.material.bottomsheets.BottomSheetsScreen
++import com.example.baseproject.ui.screens.material.buttons.ButtonsScreen
++import com.example.baseproject.ui.screens.material.cards.CardsScreen
++import com.example.baseproject.ui.screens.material.dialogs.DialogsScreen
++import com.example.baseproject.ui.screens.material.icons.IconsScreen
++import com.example.baseproject.ui.screens.material.lists.ListsScreen
++import com.example.baseproject.ui.screens.material.navigation.NavigationScreen
++import com.example.baseproject.ui.screens.material.selectioncontrols.SelectionControlsScreen
++import com.example.baseproject.ui.screens.material.textfields.TextFieldsScreen
++import com.example.baseproject.ui.screens.material.theming.ThemingScreen
+ 
+ /**
+  * Objeto que define las rutas de navegación del showcase.
+  * Centraliza todas las rutas en un solo lugar para facilitar el mantenimiento.
+  */
+ object ShowcaseRoutes {
+     const val MAIN = "main"
+     const val BUTTONS = "buttons"
+     const val TEXT_FIELDS = "textfields"
+     const val CARDS = "cards"
+@@ -39,21 +39,21 @@ object ShowcaseRoutes {
+ 
+ /**
+  * Composable principal que configura el NavHost y define todas las rutas de navegación.
+  *
+  * El NavHost es el contenedor que gestiona la navegación entre diferentes pantallas.
+  * Cada ruta (composable) define una pantalla del showcase.
+  *
+  * @param navController Controlador de navegación que maneja las transiciones entre pantallas
+  */
+ @Composable
+-fun ShowcaseNavigation(
++fun MaterialNav(
+     navController: NavHostController = rememberNavController()
+ ) {
+     NavHost(
+         navController = navController,
