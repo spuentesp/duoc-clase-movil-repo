@@ -14,6 +14,9 @@ de estudio progresivo (de Kotlin básico a Android intermedio).
   ViewModel, Repository, networking.
 - 📚 **Ejercicios Kotlin** (módulo hermano `exercises/`) — 33 ejercicios
   Kotlin JVM progresivos de básico a avanzado + coroutines + arquitectura.
+- 📝 **Evaluación 1** (carpeta `evaluacion 1/`) — 8 ejercicios con
+  enunciado, solución y suite de tests (51 tests en verde) listos para
+  IntelliJ IDEA. Ver [`evaluacion 1/README.md`](evaluacion%201/README.md).
 
 ## 🗺️ Estructura del repo
 
@@ -75,6 +78,18 @@ cd exercises
 
 Los tests fallarán hasta que implementes las funciones — eso es parte
 del aprendizaje. Ver [docs/09-Guia-Ejercicios-Kotlin.md](docs/09-Guia-Ejercicios-Kotlin.md).
+
+### Correr la Evaluación 1 (8 ejercicios ya resueltos)
+
+```bash
+cd "evaluacion 1"
+JAVA_HOME=/home/sebastian/.local/jdk/jdk-17.0.20.1+1 ./gradlew test
+```
+
+51 tests en verde, distribuidos en 8 ejercicios (POO, colecciones,
+corrutinas, excepciones, lambdas, tipos/condicionales, ciclos y
+constructores secundarios). Más detalles en
+[`evaluacion 1/README.md`](evaluacion%201/README.md).
 
 ## 📖 Rutas de aprendizaje
 
