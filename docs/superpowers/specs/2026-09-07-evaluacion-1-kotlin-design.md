@@ -85,6 +85,98 @@ tasks.test {
 | 3 | **Pagos hospitalarios** | Corrutinas: `sealed class EstadoPago`, `suspend fun procesarPago(id)` con `delay` y `runBlocking` | `runTest` y control de tiempo virtual en tests |
 | 4 | **Reservas de hotel** | POO + excepciones personalizadas (`HabitacionNoDisponibleException`, `FechaInvalidaException`) | `try/catch`, validaciones |
 | 5 | **Cuentas bancarias** | Lambdas/HOF + colecciones: `aplicarOperacion(cuentas, op: (Cuenta) -> Cuenta)` | `fold`, `sortedByDescending` |
+| 6 | **Calculadora de nóminas** | Tipos de datos, operadores aritméticos y condicionales (IL 1.1) | `when` como expresión, validación de rangos |
+| 7 | **Secuencia de Fibonacci** | Ciclos e iteraciones explícitos (`for`, `while`, `repeat`) | Rangos, `MutableList`, suma acumulativa |
+| 8 | **Figuras geométricas** | POO con constructores secundarios y propiedades computadas | `init`, `get`-propiedades derivadas, `override` de `toString` |
+
+### Ejercicio 6 — Calculadora de nóminas (IL 1.1)
+
+```kotlin
+enum class TipoEmpleado { JUNIOR, SENIOR, GERENTE }
+
+class Empleado(val nombre: String, val horasTrabajadas: Int, val tipo: TipoEmpleado) {
+    val tarifaPorHora: Int = when (tipo) {
+        TipoEmpleado.JUNIOR  -> 8_000
+        TipoEmpleado.SENIOR  -> 15_000
+        TipoEmpleado.GERENTE -> 25_000
+    }
+    val bono: Int = if (horasTrabajadas > 160) (horasTrabajadas - 160) * 5_000 else 0
+
+    fun calcularSueldoBruto(): Int = horasTrabajadas * tarifaPorHora + bono
+    fun calcularDescuento(): Int = when {
+        horasTrabajadas < 0 -> throw IllegalArgumentException("Horas no puede ser negativo")
+        calcularSueldoBruto() < 500_000 -> 0
+        calcularSueldoBruto() < 1_000_000 -> (calcularSueldoBruto() * 8) / 100
+        else -> (calcularSueldoBruto() * 15) / 100
+    }
+    fun calcularSueldoNeto(): Int = calcularSueldoBruto() - calcularDescuento()
+}
+```
+
+### Ejercicio 7 — Secuencia de Fibonacci (ciclos e iteraciones)
+
+```kotlin
+class GeneradorFibonacci {
+    fun primerosN(n: Int): List<Long> {
+        require(n >= 0) { "n debe ser >= 0" }
+        if (n == 0) return emptyList()
+        val salida = mutableListOf(0L, 1L)
+        while (salida.size < n) {
+            val next = salida[salida.size - 1] + salida[salida.size - 2]
+            salida += next
+        }
+        return salida.take(n)
+    }
+
+    fun sumaHasta(n: Int): Long = primerosN(n).sum()
+
+    fun menoresQue(limite: Long): List<Long> {
+        val lista = mutableListOf(0L, 1L)
+        while (true) {
+            val next = lista[lista.size - 1] + lista[lista.size - 2]
+            if (next >= limite) break
+            lista += next
+        }
+        return lista
+    }
+}
+```
+
+### Ejercicio 8 — Figuras geométricas (constructores secundarios + propiedades computadas)
+
+```kotlin
+sealed class Figura {
+    abstract val color: String
+    abstract fun area(): Double
+    abstract fun perimetro(): Double
+
+    class Circulo(override val color: String, val radio: Double) : Figura() {
+        constructor(color: String) : this(color, radio = 1.0)
+        override fun area() = Math.PI * radio * radio
+        override fun perimetro() = 2 * Math.PI * radio
+        override fun toString() = "Circulo(color=$color, radio=$radio)"
+    }
+
+    class Rectangulo(
+        override val color: String,
+        val ancho: Double,
+        val alto: Double
+    ) : Figura() {
+        constructor(color: String, lado: Double) : this(color, lado, lado)
+        val esCuadrado: Boolean get() = ancho == alto
+        override fun area() = ancho * alto
+        override fun perimetro() = 2 * (ancho + alto)
+        override fun toString() = "Rectangulo(color=$color, ancho=$ancho, alto=$alto)"
+    }
+
+    class TrianguloEquilatero(override val color: String, val lado: Double) : Figura() {
+        init { require(lado > 0) { "Lado debe ser > 0" } }
+        override fun area() = (Math.sqrt(3.0) / 4.0) * lado * lado
+        override fun perimetro() = 3 * lado
+        override fun toString() = "TrianguloEquilatero(color=$color, lado=$lado)"
+    }
+}
+```
 
 ### Bosquejo de las soluciones
 
@@ -194,6 +286,33 @@ Cada `enunciados/ejercicioN.md` debe incluir, en español:
 3. **Requisitos** (firmas de clases/funciones, contratos).
 4. **Enfoque paso a paso** (cómo pensarlo).
 5. **Criterios de aceptación** (qué tiene que pasar para considerarlo resuelto).
+
+## Estructura de carpetas (actualizada a 8 ejercicios)
+
+```
+evaluacion 1/
+└── src/
+    ├── main/kotlin/
+    │   ├── ejercicio1/Publicacion.kt
+    │   ├── ejercicio2/Producto.kt
+    │   ├── ejercicio3/EstadoPago.kt
+    │   ├── ejercicio4/Habitacion.kt
+    │   ├── ejercicio5/Cuenta.kt
+    │   ├── ejercicio6/Empleado.kt
+    │   ├── ejercicio7/Fibonacci.kt
+    │   └── ejercicio8/Figura.kt
+    └── test/kotlin/
+        ├── ejercicio1/PublicacionTest.kt
+        ├── ejercicio2/ProductoTest.kt
+        ├── ejercicio3/EstadoPagoTest.kt
+        ├── ejercicio4/HabitacionTest.kt
+        ├── ejercicio5/CuentaTest.kt
+        ├── ejercicio6/EmpleadoTest.kt
+        ├── ejercicio7/FibonacciTest.kt
+        └── ejercicio8/FiguraTest.kt
+```
+
+Y `enunciados/ejercicio{1..8}.md` con los enunciados correspondientes.
 
 ## Estilo del código
 

@@ -4,7 +4,7 @@
 
 **Goal:** Crear la carpeta-proyecto `evaluacion 1/` en la raíz del repo con un proyecto Gradle Kotlin JVM autocontenido que incluye 5 ejercicios (con enunciado, solución y suite de tests) similares a la Evaluación Formativa N°1.
 
-**Architecture:** Proyecto Gradle Kotlin JVM puro (mismo patrón que `exercises/`). Un único módulo con paquetes `ejercicio1`..`ejercicio5`. Cada ejercicio contiene: `enunciados/ejercicioN.md` (documentación), `src/main/kotlin/ejercicioN/Solucion.kt` (solución) y `src/test/kotlin/ejercicioN/SolucionTest.kt` (suite de tests). TDD por ejercicio: primero el test que falla, luego la implementación que lo hace pasar.
+**Architecture:** Proyecto Gradle Kotlin JVM puro (mismo patrón que `exercises/`). Un único módulo con paquetes `ejercicio1`..`ejercicio8`. Cada ejercicio contiene: `enunciados/ejercicioN.md` (documentación), `src/main/kotlin/ejercicioN/*.kt` (solución) y `src/test/kotlin/ejercicioN/*Test.kt` (suite de tests). TDD por ejercicio: primero el test que falla, luego la implementación que lo hace pasar.
 
 **Tech Stack:** Kotlin 1.9.20, Gradle 8.4 (wrapper), Java 17 toolchain, JUnit 5 (BOM 5.10.1), kotlinx-coroutines-core 1.7.3, kotlinx-coroutines-test 1.7.3.
 
@@ -45,7 +45,10 @@ evaluacion 1/
 │   ├── ejercicio2.md                         # Colecciones — Tienda
 │   ├── ejercicio3.md                         # Corrutinas — Pagos hospitalarios
 │   ├── ejercicio4.md                         # Excepciones — Reservas de hotel
-│   └── ejercicio5.md                         # Lambdas/HOF — Cuentas bancarias
+│   ├── ejercicio5.md                         # Lambdas/HOF — Cuentas bancarias
+│   ├── ejercicio6.md                         # Tipos/aritmética/condicionales — Nóminas
+│   ├── ejercicio7.md                         # Ciclos e iteraciones — Fibonacci
+│   └── ejercicio8.md                         # Constructores secundarios — Figuras
 └── src/
     ├── main/kotlin/
     │   ├── ejercicio1/Publicacion.kt         # open class + Libro + Revista
@@ -1235,6 +1238,25 @@ Esperado: el último commit aparece localmente y el remoto responde.
 | Gitignore local | `evaluacion 1/.gitignore` |
 | Exclusiones raíz | `.gitignore` (raíz, 2 líneas añadidas) |
 | Branch remoto | `origin/main` con push de todo |
+
+---
+
+## Enmienda al plan (2026-09-07): 8 ejercicios en lugar de 5
+
+A solicitud del usuario se agregan **3 ejercicios adicionales** para cubrir IL 1.1 (tipos, aritmética, condicionales) explícitamente, ciclos e iteraciones, y constructores secundarios. Las Tasks 1–7 originales siguen vigentes; se renumeran:
+
+- Task 7 (nueva) → Ejercicio 6 — Nóminas (tipos, aritmética, condicionales)
+- Task 8 (nueva) → Ejercicio 7 — Fibonacci (ciclos e iteraciones)
+- Task 9 (nueva) → Ejercicio 8 — Figuras (constructores secundarios, propiedades computadas, `sealed class`)
+- Task 10 (era Task 7) → Verificación final + push a `main` (cubre los 8 ejercicios)
+
+Cada nueva Task sigue el mismo flujo TDD del original: test que falla → solución → enunciado en español → commit. Bosquejo de las soluciones y enunciados ya está en `docs/superpowers/specs/2026-09-07-evaluacion-1-kotlin-design.md`.
+
+Dominio → código:
+
+- **Ejercicio 6** (`Empleado.kt`): `enum class TipoEmpleado`, `class Empleado(nombre, horasTrabajadas, tipo)` con `tarifaPorHora` derivado de un `when`, `bono` derivado de un `if`, y métodos `calcularSueldoBruto/Descuento/Neto` con `when`/`if`.
+- **Ejercicio 7** (`Fibonacci.kt`): `class GeneradorFibonacci` con `primerosN(n)`, `sumaHasta(n)`, `menoresQue(limite)` usando `while`, `MutableList`, `break`.
+- **Ejercicio 8** (`Figura.kt`): `sealed class Figura` con `Circulo`, `Rectangulo` (constructor secundario + `esCuadrado` get-propiedad), `TrianguloEquilatero` (con `init { require }`).
 
 ## Riesgos mitigados
 
