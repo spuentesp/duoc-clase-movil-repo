@@ -23,6 +23,10 @@ docs/books/
 exercises/build/
 exercises/.gradle/
 
+# Builds del proyecto evaluacion 1
+evaluacion 1/build/
+evaluacion 1/.gradle/
+
 # Artefactos de proceso SDD (locales, no se versionan)
 .git-backup/
 .superpowers/
