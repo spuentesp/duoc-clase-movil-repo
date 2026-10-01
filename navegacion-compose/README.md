@@ -6,6 +6,10 @@ que puedes ejecutar en la app y copiar a tu proyecto.
 
 Cada pantalla muestra en la app la explicación del concepto y el fragmento de código clave.
 
+📘 Guías complementarias:
+- [`GUIA_HILT.md`](GUIA_HILT.md): qué es la inyección de dependencias, qué es Hilt y cómo agregarlo paso a paso.
+- [`GUIA_ROBOLECTRIC.md`](GUIA_ROBOLECTRIC.md): qué es Robolectric y cómo probar pantallas y navegación sin emulador.
+
 ## Cómo abrirlo
 
 1. Android Studio → **File → Open…** → selecciona la carpeta `navegacion-compose`
@@ -111,7 +115,12 @@ val vm: DetalleViewModel = hiltViewModel()
 En ambos casos el ViewModel recibe sus dependencias **por el constructor**, y por eso
 se puede probar con un repositorio falso (ver `app/src/test/`).
 
+Explicación completa de Hilt: [`GUIA_HILT.md`](GUIA_HILT.md).
+
 ## Tests
+
+Los tests corren en el computador, sin emulador, gracias a **Robolectric** (una librería
+que simula Android dentro de la JVM). Explicación completa: [`GUIA_ROBOLECTRIC.md`](GUIA_ROBOLECTRIC.md).
 
 | Archivo | Qué comprueba |
 | --- | --- |
