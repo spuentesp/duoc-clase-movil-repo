@@ -27,6 +27,11 @@ exercises/.gradle/
 evaluacion 1/build/
 evaluacion 1/.gradle/
 
+# Builds del proyecto evaluacion parcial 1
+evaluacion parcial 1/build/
+evaluacion parcial 1/.gradle/
+evaluacion parcial 1/.kotlin/
+
 # Artefactos de proceso SDD (locales, no se versionan)
 .git-backup/
 .superpowers/

@@ -17,6 +17,10 @@ de estudio progresivo (de Kotlin básico a Android intermedio).
 - 📝 **Evaluación 1** (carpeta `evaluacion 1/`) — 8 ejercicios con
   enunciado, solución y suite de tests (51 tests en verde) listos para
   IntelliJ IDEA. Ver [`evaluacion 1/README.md`](evaluacion%201/README.md).
+- 🍔 **Evaluación Parcial 1** (carpeta `evaluacion parcial 1/`) — solución
+  de referencia del caso FoodExpress (herencia, polimorfismo, colecciones,
+  corrutinas, `sealed class`, excepciones) con tests. Ver
+  [`evaluacion parcial 1/README.md`](evaluacion%20parcial%201/README.md).
 
 ## 🗺️ Estructura del repo
 
