@@ -32,6 +32,13 @@ evaluacion parcial 1/build/
 evaluacion parcial 1/.gradle/
 evaluacion parcial 1/.kotlin/
 
+# Builds del proyecto navegacion-compose
+navegacion-compose/build/
+navegacion-compose/app/build/
+navegacion-compose/.gradle/
+navegacion-compose/.kotlin/
+navegacion-compose/local.properties
+
 # Artefactos de proceso SDD (locales, no se versionan)
 .git-backup/
 .superpowers/

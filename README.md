@@ -21,6 +21,11 @@ de estudio progresivo (de Kotlin básico a Android intermedio).
   de referencia del caso FoodExpress (herencia, polimorfismo, colecciones,
   corrutinas, `sealed class`, excepciones) con tests. Ver
   [`evaluacion parcial 1/README.md`](evaluacion%20parcial%201/README.md).
+- 🧭 **Navegación Compose** (carpeta `navegacion-compose/`) — app Android
+  independiente con 11 lecciones progresivas: navegación básica, argumentos,
+  rutas type-safe, back stack, resultados, ViewModel, grafos anidados,
+  bottom navigation e inyección de dependencias (manual y Hilt). Ver
+  [`navegacion-compose/README.md`](navegacion-compose/README.md).
 
 ## 🗺️ Estructura del repo
 
